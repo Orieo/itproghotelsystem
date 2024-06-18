@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 11, 2024 at 12:39 PM
+-- Generation Time: Jun 18, 2024 at 06:15 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `grocerease`
+-- Database: `itproghs`
 --
 
 -- --------------------------------------------------------
@@ -42,7 +42,6 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`firstName`, `lastName`, `email`, `phoneNumber`, `password`, `profilePicture`, `admin_checker`) VALUES
-('Jerome', 'Victoria', 'jerome.victoriasiy@gmail.com', '+639665004905', '$2y$10$jaEeFyDpfX1rBwvITfVz7u6SZ/iMnNDZekpHNoWlkz1dpk9px1PfO', 0x75706c6f6164732f3132332e6a7067, 1),
 ('Barry', 'Ran', 'harry@gmail.com', '+639665004905', '$2y$10$wEwOQT3EsEhLpQmOpgJtCuwSBhBmBkSLqtixOjGfLerOEnWAUBr.e', 0x75706c6f6164732f3132332e6a7067, 0),
 ('Garry', 'Ray', 'garry@gmail.com', '+639665004905', '$2y$10$0H7gah3WrBX57VIvkZKQn.tmR/gC0zhrZl33iVXE87dAmWcvogmBa', 0x75706c6f6164732f3132332e6a7067, 0);
 COMMIT;
