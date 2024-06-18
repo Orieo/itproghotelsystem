@@ -8,7 +8,7 @@ if (!isset($_SESSION['loggedin'])) {
 	$servername = "localhost";
     $username = "root";
     $dbpassword = "";
-    $dbname = "grocerease";
+    $dbname = "itproghs";
 
 	$conn = new mysqli($servername, $username, $dbpassword, $dbname);
 
@@ -39,7 +39,7 @@ if (!isset($_SESSION['loggedin'])) {
 	<body class="loggedin">
 		<nav class="navtop">
 			<div>
-				<h1>GrocerEase</h1>
+				<h1>MotelEase</h1>
 				<a href="profile.php"><i class="fas fa-user-circle"></i>Profile</a>
 				<a href="logout.php"><i class="fas fa-sign-out-alt"></i>Logout</a>
 			</div>
