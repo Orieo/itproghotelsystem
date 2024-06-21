@@ -1,6 +1,6 @@
 body {
     font-family: 'Montserrat', sans-serif;
-    background-color: #f5f5f5;
+    background-color: #f9f9f9;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -13,14 +13,20 @@ body {
     padding: 40px;
     border-radius: 10px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-    width: 400px;
+    width: 100%;
+    max-width: 500px;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-.login-container, .signup-container {
+.form-container {
     width: 100%;
+    display: none;
+}
+
+.form-container.active {
+    display: block;
 }
 
 .toggle-container {
@@ -30,7 +36,7 @@ body {
 }
 
 .toggle-container button {
-    background-color: #4CAF50;
+    background-color: #007BFF;
     border: none;
     padding: 10px 20px;
     text-align: center;
@@ -41,15 +47,16 @@ body {
     cursor: pointer;
     border-radius: 25px;
     color: white;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 .toggle-container button.active {
-    background-color: #3e8e41;
+    background-color: #0056b3;
 }
 
 .toggle-container button:hover {
-    background-color: #45a049;
+    background-color: #0056b3;
+    transform: scale(1.05);
 }
 
 input[type=text], input[type=email], input[type=password], input[type=tel], input[type=file] {
@@ -64,7 +71,7 @@ input[type=text], input[type=email], input[type=password], input[type=tel], inpu
 }
 
 button[type=submit] {
-    background-color: #4CAF50;
+    background-color: #007BFF;
     color: white;
     padding: 14px 20px;
     margin: 8px 0;
@@ -73,8 +80,31 @@ button[type=submit] {
     cursor: pointer;
     width: 100%;
     font-size: 16px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 button[type=submit]:hover {
-    background-color: #45a049;
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+.error-messages {
+    color: red;
+    margin-top: 10px;
+    font-size: 14px;
+    text-align: left;
+    width: 100%;
+}
+
+@media (max-width: 600px) {
+    .container {
+        padding: 20px;
+        width: 100%;
+        max-width: 100%;
+    }
+
+    input[type=text], input[type=email], input[type=password], input[type=tel], input[type=file], button[type=submit] {
+        padding: 10px;
+        font-size: 14px;
+    }
 }

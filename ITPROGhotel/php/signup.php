@@ -14,7 +14,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $confirmPassword = $_POST['confirmPassword'];
     $profilePicture = $_FILES['profilePicture'];
 
-    // Validate input fields
     if (empty($lastName)) $errors[] = "Last Name is required.";
     if (empty($firstName)) $errors[] = "First Name is required.";
     if (empty($email)) $errors[] = "Email is required.";
@@ -22,22 +21,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (empty($password)) $errors[] = "Password is required.";
     if ($password !== $confirmPassword) $errors[] = "Passwords do not match.";
 
-    // Validate email format
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        if (!checkdnsrr($domain, 'MX')) {
-            $errors[] = "Invalid email format.";
-        }
-       
-    }    
-    // Validate phone format
+        $errors[] = "Invalid email format.";
+    }
+
     if (!preg_match('/^(\+63|0)\d{10}$/', $phoneNumber)) {
         $errors[] = "Invalid phone number format.";
     }
-    // Validate password format
+
     if (!preg_match('/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{12,36}$/', $password)) {
         $errors[] = "Password must be 12-36 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character.";
     }
-    // Validate picture upload
+
     if ($profilePicture['error'] === UPLOAD_ERR_OK) {
         $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
         if (!in_array($profilePicture['type'], $allowedTypes)) {
@@ -57,7 +52,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $uploadFile = null; 
     }
 
-    // DATABASE CONNECTION
     $servername = "localhost";
     $username = "root";
     $dbpassword = "";
@@ -69,7 +63,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $errors[] = "Connection failed: " . $conn->connect_error;
     }
 
-    // Check if email exists
     if (empty($errors)) {
         $sql = "SELECT COUNT(*) as count FROM user WHERE email = ?";
         $stmt = $conn->prepare($sql);
@@ -90,27 +83,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 
-    // Insert data into database if no errors
     if (empty($errors)) {
-         $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
-         $sql = "INSERT INTO user (lastName, firstName, email, phoneNumber, password, profilePicture, admin_checker) VALUES (?, ?, ?, ?, ?, ?, ?)";
-         $stmt = $conn->prepare($sql);
+        $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
+        $sql = "INSERT INTO user (lastName, firstName, email, phoneNumber, password, profilePicture, admin_checker) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        $stmt = $conn->prepare($sql);
 
-    if ($stmt) {
-        $admin_checker = 0; 
-        $stmt->bind_param("ssssssi", $lastName, $firstName, $email, $phoneNumber, $hashedPassword, $uploadFile, $admin_checker);
+        if ($stmt) {
+            $admin_checker = 0; 
+            $stmt->bind_param("ssssssi", $lastName, $firstName, $email, $phoneNumber, $hashedPassword, $uploadFile, $admin_checker);
 
-        if ($stmt->execute()) {
-            echo "Success";
-            $stmt->close();
-            $conn->close();
-            exit();
+            if ($stmt->execute()) {
+                echo "Success";
+                $stmt->close();
+                $conn->close();
+                exit();
+            } else {
+                $errors[] = "Failed to execute insert statement: " . $stmt->error;
+            }
         } else {
-            $errors[] = "Failed to execute insert statement: " . $stmt->error;
+            $errors[] = "Failed to prepare insert statement: " . $conn->error;
         }
-    } else {
-        $errors[] = "Failed to prepare insert statement: " . $conn->error;
-    }
     }
 
     $conn->close();

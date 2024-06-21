@@ -9,13 +9,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const loginErrorMessages = document.getElementById('login-error-messages');
 
     toggleLogin.addEventListener('click', () => {
-        loginContainer.style.display = 'block';
-        signupContainer.style.display = 'none';
+        loginContainer.classList.add('active');
+        signupContainer.classList.remove('active');
+        toggleLogin.classList.add('active');
+        toggleSignup.classList.remove('active');
     });
 
     toggleSignup.addEventListener('click', () => {
-        loginContainer.style.display = 'none';
-        signupContainer.style.display = 'block';
+        loginContainer.classList.remove('active');
+        signupContainer.classList.add('active');
+        toggleLogin.classList.remove('active');
+        toggleSignup.classList.add('active');
     });
 
     signupForm.addEventListener('submit', (event) => {
@@ -40,19 +44,11 @@ document.addEventListener('DOMContentLoaded', () => {
             errors.push('Profile Picture must be a JPEG, PNG, or GIF file.');
         }
 
-        // Debugging line to check email value
-        console.log("Email before validation:", email); 
-
-        // Email validation
-        if (!email || !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.(com|edu\.ph)$/.test(email)) {
+        if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.(com|edu\.ph)$/.test(email)) {
             errors.push('Invalid email format.');
-        } 
-
-        // Debugging line to check errors after email validation
-        console.log("Errors after email validation:", errors); 
-        
-        if (phoneNumber && !/^(\+63|0)\d{10}$/.test(phoneNumber)) errors.push('Invalid phone number format.');
-        if (password && !/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{12,36}$/.test(password)) {
+        }
+        if (!/^(\+63|0)\d{10}$/.test(phoneNumber)) errors.push('Invalid phone number format.');
+        if (!/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{12,36}$/.test(password)) {
             errors.push('Password must be 12-36 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character.');
         }
 
@@ -62,7 +58,6 @@ document.addEventListener('DOMContentLoaded', () => {
             signupErrorMessages.innerHTML = '';
 
             const formData = new FormData(signupForm);
-            console.log("Form data ready to be sent:", formData);
             
             fetch('php/signup.php', {
                 method: 'POST',
@@ -70,7 +65,6 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             .then(response => response.text())
             .then(data => {
-                console.log("Response received:", data);
                 if (data.includes("Email already exists")) {
                     signupErrorMessages.innerHTML = data;
                 } else if (data.includes("Success")) {
@@ -81,7 +75,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             })
             .catch(error => {
-                console.error("Error during fetch:", error);
                 signupErrorMessages.innerHTML = "An error occurred: " + error.message;
             });
         }
@@ -98,23 +91,14 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .then(response => response.json())
         .then(data => {
-            console.log("Login response:", data);
             if (data.success) {
-                if (data.admin_checker == 1) {
-                    window.location.href = "php/admin_home.php";
-                } else {
-                    window.location.href = "php/home.php";
-                }
+                window.location.href = data.admin_checker == 1 ? "php/admin_home.php" : "php/home.php";
             } else {
                 loginErrorMessages.innerHTML = data.message;
-                loginErrorMessages.style.color = 'red';
             }
         })
         .catch(error => {
-            console.error("Login error:", error);
             loginErrorMessages.innerHTML = "An error occurred: " + error.message;
-            loginErrorMessages.style.color = 'red';
         });
     });
-
 });

@@ -1,23 +1,24 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
     <title>Login/Sign Up</title>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="container">
-        <div class="login-container">
+        <div class="form-container login-container active">
             <h1>Login</h1>
             <form id="login-form" action="php/authenticate.php" method="post">
                 <input type="email" placeholder="Email" name="email" required>
                 <input type="password" placeholder="Password" name="password" required>
-                <div id="login-error-messages" style="color: red;"></div>
+                <div id="login-error-messages" class="error-messages"></div>
                 <button type="submit">Login</button>
             </form>
         </div>
-        <div class="signup-container" style="display: none;">
+        <div class="form-container signup-container">
             <h1>Sign Up</h1>
             <form id="signup-form" action="php/signup.php" method="post" enctype="multipart/form-data">
                 <input type="text" placeholder="First Name" name="firstName" required>
@@ -26,13 +27,13 @@
                 <input type="tel" placeholder="Phone Number" name="phoneNumber" required>
                 <input type="password" placeholder="Password" name="password" required>
                 <input type="password" placeholder="Confirm Password" name="confirmPassword" required>
-                <input type="file" placeholder="Profile Picture" name="profilePicture" required>
-                <div id="signup-error-messages" style="color: red;"></div>
+                <input type="file" name="profilePicture" required>
+                <div id="signup-error-messages" class="error-messages"></div>
                 <button type="submit">Sign Up</button>
             </form>
         </div>
         <div class="toggle-container">
-            <button id="toggle-login">Login</button>
+            <button id="toggle-login" class="active">Login</button>
             <button id="toggle-signup">Sign Up</button>
         </div>
     </div>

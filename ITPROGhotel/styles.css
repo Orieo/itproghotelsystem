@@ -1,3 +1,4 @@
+/* General Styles */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -5,6 +6,7 @@ body {
     background-color: #f3f4f7;
 }
 
+/* Navigation Bar */
 .navtop {
     background-color: #2f3947;
     height: 60px;
@@ -48,6 +50,7 @@ body {
     color: #eaebed;
 }
 
+/* Content Area */
 .content {
     width: 1000px;
     margin: 0 auto;
@@ -81,36 +84,4 @@ body {
 .content > div p {
     padding: 5px;
     margin: 0 0 10px 0;
-}
-
-/* Added CSS from inline style */
-.profile-container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.profile-picture {
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid #007BFF;
-}
-
-.profile-details {
-    flex: 1;
-    margin-left: 20px;
-}
-
-.profile-details h2 {
-    margin-top: 0;
-}
-
-.profile-details p {
-    margin: 5px 0;
 }
