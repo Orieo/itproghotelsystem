@@ -76,6 +76,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         updateRoomAvailability($_POST['id'], $_POST['availability']);
     }
 }
+
+// Retrieve existing rooms
+function getRooms() {
+    global $conn;
+    $result = $conn->query("SELECT * FROM rooms");
+    return $result->fetch_all(MYSQLI_ASSOC);
+}
+
+$rooms = getRooms();
 ?>
 
 <!DOCTYPE html>
@@ -151,7 +160,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-top: 80px; /* Adjusted for fixed navbar */
+            margin: 80px auto; /* Adjusted for fixed navbar */
         }
 
         .form-container {
@@ -193,10 +202,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             transform: scale(1.05);
         }
 
-        input[type=text], input[type=number] {
+        label {
+            display: block;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        select, input[type=number] {
             width: 100%;
-            padding: 12px 20px;
-            margin: 8px 0;
+            padding: 12px;
+            margin-top: 5px;
             display: inline-block;
             border: 1px solid #ccc;
             border-radius: 4px;
@@ -208,7 +223,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             background-color: #007BFF;
             color: white;
             padding: 14px 20px;
-            margin: 8px 0;
+            margin-top: 20px;
             border: none;
             border-radius: 4px;
             cursor: pointer;
@@ -237,7 +252,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 max-width: 100%;
             }
 
-            input[type=text], input[type=number], button[type=submit] {
+            select, input[type=number], button[type=submit] {
                 padding: 10px;
                 font-size: 14px;
             }
@@ -267,79 +282,89 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="container">
         <h2>Room Management</h2>
         <div class="toggle-container">
-            <button onclick="showForm('addForm')">Add Room</button>
+            <button onclick="showForm('addForm')" class="active">Add Room</button>
             <button onclick="showForm('editForm')">Edit Room</button>
             <button onclick="showForm('deleteForm')">Delete Room</button>
             <button onclick="showForm('updateForm')">Update Availability</button>
         </div>
 
-        <!-- Add Room Form -->
+        <?php if (isset($error)): ?>
+        <div class="error-messages"><?php echo $error; ?></div>
+        <?php endif; ?>
+
         <div id="addForm" class="form-container active">
-            <form action="room_management.php" method="post">
-                <h3>Add Room Type</h3>
+            <form method="post">
                 <label for="type">Room Type:</label>
-                <select name="type" id="type" required>
+                <select name="type" id="type">
                     <?php foreach ($roomTypes as $type => $price): ?>
-                        <option value="<?php echo $type; ?>"><?php echo $type; ?> (<?php echo $price; ?> PHP)</option>
+                    <option value="<?php echo $type; ?>"><?php echo $type; ?></option>
                     <?php endforeach; ?>
                 </select>
+
                 <label for="availability">Availability:</label>
                 <input type="number" name="availability" id="availability" min="0" required>
+
                 <button type="submit" name="add">Add Room</button>
-                <?php if (isset($error)): ?>
-                    <div class="error-messages"><?php echo $error; ?></div>
-                <?php endif; ?>
             </form>
         </div>
 
-        <!-- Edit Room Form -->
         <div id="editForm" class="form-container">
-            <form action="room_management.php" method="post">
-                <h3>Edit Room Type</h3>
+            <form method="post">
                 <label for="id">Room ID:</label>
                 <input type="number" name="id" id="id" min="1" required>
+
                 <label for="type">Room Type:</label>
-                <select name="type" id="type" required>
+                <select name="type" id="type">
                     <?php foreach ($roomTypes as $type => $price): ?>
-                        <option value="<?php echo $type; ?>"><?php echo $type; ?> (<?php echo $price; ?> PHP)</option>
+                    <option value="<?php echo $type; ?>"><?php echo $type; ?></option>
                     <?php endforeach; ?>
                 </select>
+
                 <label for="availability">Availability:</label>
                 <input type="number" name="availability" id="availability" min="0" required>
+
                 <button type="submit" name="edit">Edit Room</button>
-                <?php if (isset($error)): ?>
-                    <div class="error-messages"><?php echo $error; ?></div>
-                <?php endif; ?>
             </form>
         </div>
 
-        <!-- Delete Room Form -->
         <div id="deleteForm" class="form-container">
-            <form action="room_management.php" method="post">
-                <h3>Delete Room Type</h3>
+            <form method="post">
                 <label for="id">Room ID:</label>
                 <input type="number" name="id" id="id" min="1" required>
+
                 <button type="submit" name="delete">Delete Room</button>
-                <?php if (isset($error)): ?>
-                    <div class="error-messages"><?php echo $error; ?></div>
-                <?php endif; ?>
             </form>
         </div>
 
-        <!-- Update Room Availability Form -->
         <div id="updateForm" class="form-container">
-            <form action="room_management.php" method="post">
-                <h3>Update Room Availability</h3>
+            <form method="post">
                 <label for="id">Room ID:</label>
                 <input type="number" name="id" id="id" min="1" required>
+
                 <label for="availability">Availability:</label>
                 <input type="number" name="availability" id="availability" min="0" required>
+
                 <button type="submit" name="update">Update Availability</button>
-                <?php if (isset($error)): ?>
-                    <div class="error-messages"><?php echo $error; ?></div>
-                <?php endif; ?>
             </form>
         </div>
+
+        <h3>Existing Rooms</h3>
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Type</th>
+                <th>Price per Night</th>
+                <th>Availability</th>
+            </tr>
+            <?php foreach ($rooms as $room): ?>
+            <tr>
+                <td><?php echo $room['id']; ?></td>
+                <td><?php echo $room['type']; ?></td>
+                <td><?php echo $room['price_per_night']; ?></td>
+                <td><?php echo $room['availability']; ?></td>
+            </tr>
+            <?php endforeach; ?>
+        </table>
     </div>
 </body>
 </html>
