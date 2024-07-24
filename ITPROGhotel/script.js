@@ -33,6 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const password = signupForm.elements['password'].value;
         const confirmPassword = signupForm.elements['confirmPassword'].value;
         const profilePicture = signupForm.elements['profilePicture'].files[0];
+        const adminCode = signupForm.elements['adminCode'].value.trim();
 
         if (!firstName) errors.push('First Name is required.');
         if (!lastName) errors.push('Last Name is required.');
@@ -50,6 +51,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!/^(\+63|0)\d{10}$/.test(phoneNumber)) errors.push('Invalid phone number format.');
         if (!/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{12,36}$/.test(password)) {
             errors.push('Password must be 12-36 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character.');
+        }
+
+        if (adminCode && adminCode !== '1234') {
+            errors.push('Invalid admin code.');
         }
 
         if (errors.length > 0) {

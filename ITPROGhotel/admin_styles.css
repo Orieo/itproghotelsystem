@@ -1,0 +1,63 @@
+/* admin_styles.css */
+
+body.loggedin {
+    background-color: #f4f4f4;
+    font-family: Arial, sans-serif;
+}
+
+.navtop div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 1000px;
+    padding: 0 20px;
+    margin: 0 auto;
+}
+
+.navtop h1, .navtop a {
+    color: #fff;
+    text-decoration: none;
+    margin: 0;
+    padding: 0;
+    line-height: 60px;
+}
+
+.navtop a {
+    padding: 0 10px;
+}
+
+.content {
+    width: 1000px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    text-align: center;
+}
+
+.button-container {
+    margin-top: 40px;
+}
+
+.button-large {
+    display: inline-block;
+    padding: 15px 30px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.button-large:hover {
+    background-color: #0056b3;
+}
+
+.button-large i {
+    margin-right: 10px;
+}

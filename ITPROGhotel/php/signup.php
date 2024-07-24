@@ -13,26 +13,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = $_POST['password'];
     $confirmPassword = $_POST['confirmPassword'];
     $profilePicture = $_FILES['profilePicture'];
+    $adminCode = trim($_POST['adminCode']);
 
+    // Validation logic
     if (empty($lastName)) $errors[] = "Last Name is required.";
     if (empty($firstName)) $errors[] = "First Name is required.";
     if (empty($email)) $errors[] = "Email is required.";
     if (empty($phoneNumber)) $errors[] = "Phone Number is required.";
     if (empty($password)) $errors[] = "Password is required.";
     if ($password !== $confirmPassword) $errors[] = "Passwords do not match.";
-
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $errors[] = "Invalid email format.";
-    }
-
-    if (!preg_match('/^(\+63|0)\d{10}$/', $phoneNumber)) {
-        $errors[] = "Invalid phone number format.";
-    }
-
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) $errors[] = "Invalid email format.";
+    if (!preg_match('/^(\+63|0)\d{10}$/', $phoneNumber)) $errors[] = "Invalid phone number format.";
     if (!preg_match('/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{12,36}$/', $password)) {
         $errors[] = "Password must be 12-36 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character.";
     }
 
+    // Check profile picture
     if ($profilePicture['error'] === UPLOAD_ERR_OK) {
         $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
         if (!in_array($profilePicture['type'], $allowedTypes)) {
@@ -52,6 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $uploadFile = null; 
     }
 
+    // Database connection
     $servername = "localhost";
     $username = "root";
     $dbpassword = "";
@@ -63,6 +60,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $errors[] = "Connection failed: " . $conn->connect_error;
     }
 
+    // Check if email already exists
     if (empty($errors)) {
         $sql = "SELECT COUNT(*) as count FROM user WHERE email = ?";
         $stmt = $conn->prepare($sql);
@@ -83,13 +81,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 
+    // Insert user into the database
     if (empty($errors)) {
         $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
+        $admin_checker = ($adminCode === '1234') ? 1 : 0;
         $sql = "INSERT INTO user (lastName, firstName, email, phoneNumber, password, profilePicture, admin_checker) VALUES (?, ?, ?, ?, ?, ?, ?)";
         $stmt = $conn->prepare($sql);
 
         if ($stmt) {
-            $admin_checker = 0; 
             $stmt->bind_param("ssssssi", $lastName, $firstName, $email, $phoneNumber, $hashedPassword, $uploadFile, $admin_checker);
 
             if ($stmt->execute()) {

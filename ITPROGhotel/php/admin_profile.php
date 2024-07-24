@@ -1,31 +1,29 @@
 <?php
-
 session_start();
 if (!isset($_SESSION['loggedin'])) {
-	header('Location: ../index.html');
-	exit;
+    header('Location: ../index.html');
+    exit;
 }
-	$servername = "localhost";
-    $username = "root";
-    $dbpassword = "";
-    $dbname = "itproghs";
 
-	$conn = new mysqli($servername, $username, $dbpassword, $dbname);
+$servername = "localhost";
+$username = "root";
+$dbpassword = "";
+$dbname = "itproghs";
 
-    if ($conn->connect_error) {
-        $response = array(
-            "success" => false,
-            "message" => "Connection failed: " . $conn->connect_error
-        );
-        echo json_encode($response);
-        return;
-    }
-	$stmt = $conn->prepare('SELECT * FROM user WHERE email = ?');
-    $stmt->bind_param('s', $email);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $row = $result->fetch_assoc();
-	$stmt->close();
+$conn = new mysqli($servername, $username, $dbpassword, $dbname);
+
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+$email = $_SESSION['email']; // Assuming email is stored in session after login
+$stmt = $conn->prepare('SELECT * FROM user WHERE email = ?');
+$stmt->bind_param('s', $email);
+$stmt->execute();
+$result = $stmt->get_result();
+$user = $result->fetch_assoc();
+$stmt->close();
+$conn->close();
 ?>
 
 <!DOCTYPE html>
@@ -40,6 +38,7 @@ if (!isset($_SESSION['loggedin'])) {
 		<nav class="navtop">
 			<div>
 				<h1>MotelEase</h1>
+				<a href="admin_home.php">Admin Home</a>
 				<a href="admin_profile.php"><i class="fas fa-user-circle"></i>Admin Profile</a>
 				<a href="logout.php"><i class="fas fa-sign-out-alt"></i>Logout</a>
 			</div>
@@ -47,7 +46,11 @@ if (!isset($_SESSION['loggedin'])) {
 		<div class="content">
 			<h2>Profile Page</h2>
 			<div>
-				<p>Your account details are below:</p>
+			<div class="profile-details">
+                <h2><?php echo htmlspecialchars($user['firstName']) . ' ' . htmlspecialchars($user['lastName']); ?></h2>
+                <p><strong>Email:</strong> <?php echo htmlspecialchars($user['email']); ?></p>
+                <p><strong>Phone Number:</strong> <?php echo htmlspecialchars($user['phoneNumber']); ?></p>
+            </div>
 			</div>
 		</div>
 	</body>

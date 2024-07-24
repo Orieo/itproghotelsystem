@@ -24,7 +24,7 @@ $roomTypes = [
 function addRoomType($type, $price, $availability) {
     global $conn;
     $stmt = $conn->prepare("INSERT INTO rooms (type, price_per_night, availability) VALUES (?, ?, ?)");
-    $stmt->bind_param("sdi", $type, $price, $availability);
+    $stmt->bind_param("sii", $type, $price, $availability);
     $stmt->execute();
     $stmt->close();
 }
@@ -33,7 +33,7 @@ function addRoomType($type, $price, $availability) {
 function editRoomType($id, $type, $price, $availability) {
     global $conn;
     $stmt = $conn->prepare("UPDATE rooms SET type = ?, price_per_night = ?, availability = ? WHERE id = ?");
-    $stmt->bind_param("sdii", $type, $price, $availability, $id);
+    $stmt->bind_param("siii", $type, $price, $availability, $id);
     $stmt->execute();
     $stmt->close();
 }
@@ -58,22 +58,28 @@ function updateRoomAvailability($id, $availability) {
 
 // Handle form submissions
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $success = "";
+    $error = "";
     if (isset($_POST['add'])) {
         if (array_key_exists($_POST['type'], $roomTypes)) {
             addRoomType($_POST['type'], $roomTypes[$_POST['type']], $_POST['availability']);
+            $success = "Room added successfully.";
         } else {
             $error = "Invalid room type.";
         }
     } elseif (isset($_POST['edit'])) {
         if (array_key_exists($_POST['type'], $roomTypes)) {
             editRoomType($_POST['id'], $_POST['type'], $roomTypes[$_POST['type']], $_POST['availability']);
+            $success = "Room edited successfully.";
         } else {
             $error = "Invalid room type.";
         }
     } elseif (isset($_POST['delete'])) {
         deleteRoomType($_POST['id']);
+        $success = "Room deleted successfully.";
     } elseif (isset($_POST['update'])) {
         updateRoomAvailability($_POST['id'], $_POST['availability']);
+        $success = "Room availability updated successfully.";
     }
 }
 
@@ -245,6 +251,14 @@ $rooms = getRooms();
             width: 100%;
         }
 
+        .success-messages {
+            color: green;
+            margin-top: 10px;
+            font-size: 14px;
+            text-align: left;
+            width: 100%;
+        }
+
         @media (max-width: 600px) {
             .container {
                 padding: 20px;
@@ -275,79 +289,87 @@ $rooms = getRooms();
         <div>
             <h1>MotelEase</h1>
             <a href="profile.php"><i class="fas fa-user-circle"></i>Profile</a>
-            <a href="room_management.php"><i class="fas fa-cogs"></i>Room Management</a>
             <a href="logout.php"><i class="fas fa-sign-out-alt"></i>Logout</a>
         </div>
     </nav>
     <div class="container">
         <h2>Room Management</h2>
+        <?php if (!empty($success)): ?>
+            <div class="success-messages"><?= $success ?></div>
+        <?php endif; ?>
+        <?php if (!empty($error)): ?>
+            <div class="error-messages"><?= $error ?></div>
+        <?php endif; ?>
         <div class="toggle-container">
-            <button onclick="showForm('addForm')" class="active">Add Room</button>
-            <button onclick="showForm('editForm')">Edit Room</button>
-            <button onclick="showForm('deleteForm')">Delete Room</button>
-            <button onclick="showForm('updateForm')">Update Availability</button>
+            <button class="active" onclick="showForm('add-form')">Add Room</button>
+            <button onclick="showForm('edit-form')">Edit Room</button>
+            <button onclick="showForm('delete-form')">Delete Room</button>
+            <button onclick="showForm('update-availability-form')">Update Availability</button>
         </div>
 
-        <?php if (isset($error)): ?>
-        <div class="error-messages"><?php echo $error; ?></div>
-        <?php endif; ?>
-
-        <div id="addForm" class="form-container active">
+        <div id="add-form" class="form-container active">
+            <h3>Add Room Type</h3>
             <form method="post">
                 <label for="type">Room Type:</label>
-                <select name="type" id="type">
-                    <?php foreach ($roomTypes as $type => $price): ?>
-                    <option value="<?php echo $type; ?>"><?php echo $type; ?></option>
-                    <?php endforeach; ?>
+                <select id="type" name="type">
+                    <option value="Single">Single</option>
+                    <option value="Double">Double</option>
+                    <option value="Suite">Suite</option>
                 </select>
-
-                <label for="availability">Availability:</label>
-                <input type="number" name="availability" id="availability" min="0" required>
-
+                <label for="availability">Availability (0 for Available, 1 for Unavailable):</label>
+                <input type="number" id="availability" name="availability" min="0" max="1" required>
                 <button type="submit" name="add">Add Room</button>
             </form>
         </div>
 
-        <div id="editForm" class="form-container">
+        <div id="edit-form" class="form-container">
+            <h3>Edit Room Type</h3>
             <form method="post">
                 <label for="id">Room ID:</label>
-                <input type="number" name="id" id="id" min="1" required>
-
-                <label for="type">Room Type:</label>
-                <select name="type" id="type">
-                    <?php foreach ($roomTypes as $type => $price): ?>
-                    <option value="<?php echo $type; ?>"><?php echo $type; ?></option>
+                <select id="id" name="id">
+                    <?php foreach ($rooms as $room): ?>
+                        <option value="<?= $room['id'] ?>"><?= $room['id'] ?> (<?= $room['type'] ?>)</option>
                     <?php endforeach; ?>
                 </select>
-
-                <label for="availability">Availability:</label>
-                <input type="number" name="availability" id="availability" min="0" required>
-
+                <label for="type">Room Type:</label>
+                <select id="type" name="type">
+                    <option value="Single">Single</option>
+                    <option value="Double">Double</option>
+                    <option value="Suite">Suite</option>
+                </select>
+                <label for="availability">Availability (0 for Available, 1 for Unavailable):</label>
+                <input type="number" id="availability" name="availability" min="0" max="1" required>
                 <button type="submit" name="edit">Edit Room</button>
             </form>
         </div>
 
-        <div id="deleteForm" class="form-container">
+        <div id="delete-form" class="form-container">
+            <h3>Delete Room Type</h3>
             <form method="post">
                 <label for="id">Room ID:</label>
-                <input type="number" name="id" id="id" min="1" required>
-
+                <select id="id" name="id">
+                    <?php foreach ($rooms as $room): ?>
+                        <option value="<?= $room['id'] ?>"><?= $room['id'] ?> (<?= $room['type'] ?>)</option>
+                    <?php endforeach; ?>
+                </select>
                 <button type="submit" name="delete">Delete Room</button>
             </form>
         </div>
 
-        <div id="updateForm" class="form-container">
+        <div id="update-availability-form" class="form-container">
+            <h3>Update Room Availability</h3>
             <form method="post">
                 <label for="id">Room ID:</label>
-                <input type="number" name="id" id="id" min="1" required>
-
-                <label for="availability">Availability:</label>
-                <input type="number" name="availability" id="availability" min="0" required>
-
+                <select id="id" name="id">
+                    <?php foreach ($rooms as $room): ?>
+                        <option value="<?= $room['id'] ?>"><?= $room['id'] ?> (<?= $room['type'] ?>)</option>
+                    <?php endforeach; ?>
+                </select>
+                <label for="availability">Availability (0 for Available, 1 for Unavailable):</label>
+                <input type="number" id="availability" name="availability" min="0" max="1" required>
                 <button type="submit" name="update">Update Availability</button>
             </form>
         </div>
-
         <h3>Existing Rooms</h3>
         <table>
             <tr>
@@ -368,3 +390,4 @@ $rooms = getRooms();
     </div>
 </body>
 </html>
+
