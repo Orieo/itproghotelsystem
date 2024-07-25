@@ -2,14 +2,26 @@ body {
     font-family: 'Montserrat', sans-serif;
     background-color: #f9f9f9;
     display: flex;
+    flex-direction: column;
+    /**/
     justify-content: center;
     align-items: center;
     height: 100vh;
     margin: 0;
+    /**/
+    text-align: center;
+}
+
+h2{
+    font-family: 'Lalezar', system-ui;
+    font-weight: bold;
+    font-size: 36px;
+    color: white;
+    margin: 10px 0px;
 }
 
 .container {
-    background-color: white;
+    background-color: #F48020;
     padding: 40px;
     border-radius: 10px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
@@ -36,27 +48,37 @@ body {
 }
 
 .toggle-container button {
-    background-color: #007BFF;
+    background-color: #FFA458;
     border: none;
-    padding: 10px 20px;
+    padding: 14px 20px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
-    margin: 4px 2px;
+    font-weight: bold;
+    /* margin: 4px 2px; */
+    margin: 8px 0;
     cursor: pointer;
     border-radius: 25px;
     color: white;
+    width: 100%;
     transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
-.toggle-container button.active {
-    background-color: #0056b3;
-}
+/* .toggle-container button.active {
+    background-color: orange;
+} */
 
 .toggle-container button:hover {
-    background-color: #0056b3;
+    background-color: orange;
     transform: scale(1.05);
+}
+
+.separator {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 20px 20px;
+    color: white;
 }
 
 input[type=text], input[type=email], input[type=password], input[type=tel], input[type=file] {
@@ -70,7 +92,7 @@ input[type=text], input[type=email], input[type=password], input[type=tel], inpu
     font-size: 16px;
 }
 
-button[type=submit] {
+/* button[type=submit] {
     background-color: #007BFF;
     color: white;
     padding: 14px 20px;
@@ -81,12 +103,41 @@ button[type=submit] {
     width: 100%;
     font-size: 16px;
     transition: background-color 0.3s ease, transform 0.3s ease;
-}
+} 
 
 button[type=submit]:hover {
     background-color: #0056b3;
     transform: scale(1.05);
+} */
+
+button[type=submit] {
+    background-color: #FFA458;
+    border: none;
+    padding: 14px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    font-weight: bold;
+    /* margin: 4px 2px; */
+    margin: 8px 0;
+    cursor: pointer;
+    border-radius: 25px;
+    color: white;
+    width: 100%;
+    transition: background-color 0.3s ease, transform 0.3s ease;
 }
+
+/* button[type=submit]active {
+    background-color: #0056b3;
+} */
+
+button[type=submit]:hover {
+    background-color: orange;
+    transform: scale(1.05);
+}
+
+
 
 .error-messages {
     color: red;
