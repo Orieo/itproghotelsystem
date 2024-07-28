@@ -1,12 +1,43 @@
 /* General Styles */
 body {
-    font-family: Arial, sans-serif;
+    font-family:'Lalezar', system-ui;
     margin: 0;
     padding: 0;
-    background-color: #f3f4f7;
+    background-color: white;
 }
 
-/* Navigation Bar */
+/* Header */
+/* TODO:
+    - Find a way to dynamically adjust the centering or justification of 'MENU' 
+    - Make it bigger(?)
+*/
+
+.header {
+    background-color: #F48020;
+    height: 60px;
+    width: 100%;
+    border: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.header div {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.header h1{
+    font-size: 40px;
+    font-weight: 400;
+    margin: 0;
+    padding: 0;
+    color: white;
+}
+
+/* Navigation Bar
 .navtop {
     background-color: #2f3947;
     height: 60px;
@@ -48,13 +79,97 @@ body {
 
 .navtop div a:hover {
     color: #eaebed;
+} */
+
+/* Sidebar */
+.sidebar {
+    position: fixed;
+    right: 0;
+    top: 0px;
+    width: 250px;
+    background-color: white;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2x;
+    border-left: 2px solid #ccc;
+    font-size: 20px;
+    font-weight: 400;
 }
+
+.sidebar img {
+    margin-bottom: 20px;
+}
+.sidebar a {
+    color: #DD6400;
+    text-decoration: none;
+    margin-bottom: auto;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+}
+
+.sidebar-bottom {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: auto;
+}
+
+.sidebar-bottom a {
+    margin-bottom: 20px;
+}
+
+.sidebar a i {
+    margin-right: 8px;
+}
+
+.sidebar a:hover {
+    text-decoration: underline;
+}
+
 
 /* Content Area */
 .content {
+    margin-left: 20px;
+    margin-right: 220px;
+    padding: 20px;
+    width: calc(100% - 240px);
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.grid-element {
+    background-color: #DD6400;
+    color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.grid-element h3 {
+    font-size: 32px;
+    font-weight: 400;
+    margin-top: 0;
+}
+
+.grid-element p {
+    font-family: "IBM Plex Sans Thai", sans-serif;
+    font-size: 15px;
+    font-weight: 400px;
+    margin: 0;
+}
+
+
+  /* .content {
     width: 1000px;
     margin: 0 auto;
-}
+} 
 
 .content h2 {
     margin: 0;
@@ -84,4 +199,8 @@ body {
 .content > div p {
     padding: 5px;
     margin: 0 0 10px 0;
-}
+}  */
+
+
+
+
