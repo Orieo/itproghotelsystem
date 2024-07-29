@@ -21,7 +21,7 @@ if (!isset($_SESSION['loggedin'])) {
 <body class="loggedin">
     <div class="header">
         <div>
-            <h1>Room Selection</h1>
+            <h1>Single Bed</h1>
         </div>
     </div>
 
@@ -35,26 +35,30 @@ if (!isset($_SESSION['loggedin'])) {
     </nav>
 
     <div class="content">
-        <!-- <h2>Welcome to MotelEase</h2>
-        <p>Container for content <33</p> -->
         <div class = "grid-container">
                 <div class = "grid-element">
-                    <h3> Single Bed </h3>
-                    <a href="single-bed.php" class="grid-item button-item">Click Me</a>
-                </div>
-                <!-- <div class = "grid-element">
-                    <h3> 2 Single Beds </h3>
-                    <a href=".php" class="grid-item button-item">Click Me</a>
-                </div> -->
-                <div class = "grid-element">
-                    <h3> Double </h3>
-                    <a href="Double bed v2.php" class="grid-item button-item">Click Me</a>
+                <img src = "" alt = "Room Picture"> </a>
                 </div>
                 <div class = "grid-element">
-                    <h3> Suite </h3>
-                    <a href="suite.php" class="grid-item button-item">Click Me</a>
+                <img src = "" alt = "Room Picture"> </a>
+                </div>
+                <div class = "grid-element">
+                <img src = "" alt = "Room Picture"> </a>
+                </div>
+                <div class = "grid-element">
+                <img src = "" alt = "Room Picture"> </a>
+                </div>
+        </div>
 
-                </div>
+        <div class = "text-container">
+            <h3> Description </h3>
+            <p> Text here</p> <br>
+            <h3> Description </h3>
+            <p> Text here</p> <br>
+            <h3> Description </h3>
+            <p> Text here</p> <br>
+            <h3> Description </h3>
+            <p> Text here</p>
         </div>
     </div>
 </body>
