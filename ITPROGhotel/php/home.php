@@ -51,6 +51,7 @@ if (!isset($_SESSION['loggedin'])) {
                 <div class = "grid-element">
                     <h3> Room Selection </h3>
                     <p> Book and check the list of available toom types </p>
+                    <a href="room-selection.php" class="grid-item button-item">Click Me</a>
                 </div>
                 <div class = "grid-element">
                     <h3> Summary </h3>
@@ -58,16 +59,19 @@ if (!isset($_SESSION['loggedin'])) {
                         - Apply promotions <br>
                         - Summary of selected room/s, amenities and total price 
                     </p>
+                    <a href="summary.php" class="grid-item button-item">Click Me</a>
                 </div>
                 <div class = "grid-element">
                     <h3> Amenities </h3>
                     <p> List of available amenities </p>
+                    <a href="Amenities v2.php" class="grid-item button-item">Click Me</a>
                 </div>
                 <div class = "grid-element">
                     <h3> Checkout </h3>
                     <p> - Payment Options <br>
                         - Confirm/Cancel your booking
                     </p>
+                    <a href="checkout.php" class="grid-item button-item">Click Me</a>
                 </div>
         </div>
     </div>
