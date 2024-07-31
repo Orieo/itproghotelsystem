@@ -37,7 +37,7 @@ if (!isset($_SESSION['loggedin'])) {
 
     <nav class = "sidebar">
         <a href = "home.php"> <img src = "" alt = "MotelEase Logo"> </a>
-        <a href="aboutus.php" class="about-us">About us</a>
+        <a href="aboutus.html" class="about-us">About us</a>
         <div class = "sidebar-bottom">
             <a href="profile.php"><i class="fas fa-user-circle"></i>Profile</a>
             <a href="logout.php"><i class="fas fa-sign-out-alt"></i>Logout</a>
@@ -64,7 +64,7 @@ if (!isset($_SESSION['loggedin'])) {
                 <div class = "grid-element">
                     <h3> Amenities </h3>
                     <p> List of available amenities </p>
-                    <a href="Amenities v2.php" class="grid-item button-item">Click Me</a>
+                    <a href="Amenities.php" class="grid-item button-item">Click Me</a>
                 </div>
                 <div class = "grid-element">
                     <h3> Checkout </h3>
