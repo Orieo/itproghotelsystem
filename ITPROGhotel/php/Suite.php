@@ -45,9 +45,6 @@ if (!isset($_SESSION['loggedin'])) {
                 <button onclick="window.location.href='checkout.php?room=suite'">Book</button>
             </div>
         </div>
-        <div class="buttons">
-            <button onclick="window.location.href='menu.php'">Go back</button>
-        </div>
     </div>
 </body>
 </html>
