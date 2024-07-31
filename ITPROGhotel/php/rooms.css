@@ -117,18 +117,19 @@ body {
     border-radius: 8px;
 }
 
-.grid-element h3 {
+.text-container h3 {
     font-size: 32px;
     font-weight: 400;
-    margin-top: 0;
+    margin-top: 15px;
+    margin-bottom: 0px;
 }
 
-.grid-element p {
+.text-container  p {
     font-family: "IBM Plex Sans Thai", sans-serif;
     font-size: 15px;
     font-weight: 400px;
-    margin: 0;
-}
+    margin-bottom: 0px;
+} 
 
 
 

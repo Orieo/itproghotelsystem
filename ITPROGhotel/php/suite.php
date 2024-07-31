@@ -10,7 +10,7 @@ if (!isset($_SESSION['loggedin'])) {
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Single Bedroom</title>
+    <title>Suite Room</title>
     <link href="rooms.css" rel="stylesheet" type="text/css">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -21,7 +21,7 @@ if (!isset($_SESSION['loggedin'])) {
 <body class="loggedin">
     <div class="header">
         <div>
-            <h1>Single Bedroom</h1>
+            <h1>Suite Bedroom</h1>
         </div>
     </div>
 
