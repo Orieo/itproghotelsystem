@@ -4,71 +4,58 @@ if (!isset($_SESSION['loggedin'])) {
     header('Location: ../index.html');
     exit;
 }
+
+$conn = new mysqli('localhost', 'root', '', 'itproghs');
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Fetch available Single Bed rooms
+$stmt = $conn->prepare("SELECT * FROM rooms WHERE type = 'Single' AND availability = 0");
+$stmt->execute();
+$result = $stmt->get_result();
+$singleRooms = $result->fetch_all(MYSQLI_ASSOC);
+$stmt->close();
+$conn->close();
 ?>
 
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Single Bed</title>
+    <title>Single Bed Rooms</title>
     <link href="../styles.css" rel="stylesheet" type="text/css">
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Lalezar&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body class="loggedin">
     <div class="header">
-        <div>
-            <h1>Single Beds</h1>
-        </div>
+        <h1>Single Bed Rooms</h1>
     </div>
-
     <nav class="sidebar">
-        <a href="home.php"><img src="path_to_logo.png" alt="MotelEase Logo"></a>
+        <a href="home.php"><img src="" alt="MotelEase Logo"></a>
         <a href="aboutus.html" class="about-us">About us</a>
         <div class="sidebar-bottom">
             <a href="profile.php"><i class="fas fa-user-circle"></i>Profile</a>
             <a href="logout.php"><i class="fas fa-sign-out-alt"></i>Logout</a>
         </div>
     </nav>
-
     <div class="content">
+        <h2>Available Single Bed Rooms</h2>
         <div class="grid-container">
-            <div class="grid-element">
-                <img src="uploads/Deluxe.png" alt="Room Picture" style="max-width: 100%; height: auto;">
-                <h3>Deluxe single bedroom</h3>
-                <p>Perfect for solo travelers seeking comfort and convenience. The room features a comfortable deluxe bed with memory foam and plush linens, a large work desk, a cable TV for your entertainment, and a bigger bathroom.</p>
-                <p>Price: P3,490 per night</p>
-                <p>Availability: Available</p>
-                <button onclick="window.location.href='checkout.php?room=mid_tier_single'">Book</button>
-            </div>
-            <div class="grid-element">
-                <img src="uploads/Luxury.png" alt="Room Picture" style="max-width: 100%; height: auto;">
-                <h3>Luxury single bedroom</h3>
-                <p>Our best comfortable luxurious single bed room. This room offers a spacious living room and a single bed with comfy premium memory foam and premium plush beddings, a mini-fridge, 4k Ultra HD internet TV, and big shower room with bathtub.</p>
-                <p>Price: P6,350 per night</p>
-                <p>Availability: Available</p>
-                <button onclick="window.location.href='checkout.php?room=mid_tier_single'">Book</button>
-            </div>
-            <div class="grid-element">
-                <img src="uploads/Mid-tier-window-view.png" alt="Room Picture" style="max-width: 100%; height: auto;">
-                <h3>Mid-tier single bedroom with a view</h3>
-                <p>Designed for comfort and style. It includes a single bed with cool foam mattress, a medium sized reading desk, a toilet with showers, and a large window view.</p>
-                <p>Price: P1,950 per night</p>
-                <p>Availability: Available</p>
-                <button onclick="window.location.href='checkout.php?room=mid_tier_single'">Book</button>
-            </div>
-            <div class="grid-element">
-                <img src="uploads/Budget-friendly.png   " alt="Room Picture" style="max-width: 100%; height: auto;">
-                <h3>Budget-friendly single bedroom</h3>
-                <p>Ideal for short stays. The room includes a standard single bed, a compact cozy workspace, and a toilet.</p>
-                <p>Price: P999 per night</p>
-                <p>Availability: Available</p>
-                <button onclick="window.location.href='checkout.php?room=mid_tier_single'">Book</button>
-            </div>
-        </div>
+            <?php foreach ($singleRooms as $room): ?>
+                <div class="grid-element">
+                    <p>Room Number: <?= htmlspecialchars($room['id']) ?></p>
+                    <p>Price per Night: <?= htmlspecialchars($room['price_per_night']) ?> PHP</p>
+                    <form action="add-to-cart.php" method="post">
+                        <input type="hidden" name="type" value="room">
+                        <input type="hidden" name="id" value="<?= htmlspecialchars($room['id']) ?>">
+                        <input type="hidden" name="name" value="Single Bed Room">
+                        <input type="hidden" name="price" value="<?= htmlspecialchars($room['price_per_night']) ?>">
+                        <label for="nights">Number of Nights:</label>
+                        <input type="number" name="quantity" min="1" max="30" required>
+                        <input type="submit" value="Add to Cart" class="grid-item button-item">
+                    </form>
+                </div>
+            <?php endforeach; ?>
         </div>
     </div>
 </body>

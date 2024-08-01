@@ -59,7 +59,7 @@ if (!isset($_SESSION['loggedin'])) {
                         - Apply promotions <br>
                         - Summary of selected room/s, amenities and total price 
                     </p>
-                    <a href="summary.php" class="grid-item button-item">Click Me</a>
+                    <a href="cart.php" class="grid-item button-item">Click Me</a>
                 </div>
                 <div class = "grid-element">
                     <h3> Amenities </h3>

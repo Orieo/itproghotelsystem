@@ -4,46 +4,58 @@ if (!isset($_SESSION['loggedin'])) {
     header('Location: ../index.html');
     exit;
 }
+
+$conn = new mysqli('localhost', 'root', '', 'itproghs');
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+$stmt = $conn->prepare("SELECT * FROM rooms WHERE type = 'Suite' AND availability = 0");
+$stmt->execute();
+$result = $stmt->get_result();
+$suiteRooms = $result->fetch_all(MYSQLI_ASSOC);
+$stmt->close();
+
+$conn->close();
 ?>
 
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Suite</title>
+    <title>Suite Rooms</title>
     <link href="../styles.css" rel="stylesheet" type="text/css">
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Lalezar&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body class="loggedin">
     <div class="header">
-        <div>
-            <h1>Suite</h1>
-        </div>
+        <h1>Suite Rooms</h1>
     </div>
-
     <nav class="sidebar">
-        <a href="home.php"><img src="path_to_logo.png" alt="MotelEase Logo"></a>
-        <a href="aboutus.php" class="about-us">About us</a>
+        <a href="home.php"><img src="" alt="MotelEase Logo"></a>
+        <a href="aboutus.html" class="about-us">About us</a>
         <div class="sidebar-bottom">
             <a href="profile.php"><i class="fas fa-user-circle"></i>Profile</a>
             <a href="logout.php"><i class="fas fa-sign-out-alt"></i>Logout</a>
         </div>
     </nav>
-
     <div class="content">
+        <h2>Available Suite Rooms</h2>
         <div class="grid-container">
-            <div class="grid-element">
-                <img src="uploads/Suite.png" alt="Suite" style="max-width: 100%; height: auto;">
-                <h3>Luxury Suite</h3>
-                <p>Experience the ultimate in luxury with our spacious suite. This room features a king-size bed with premium linens, a separate living area, a mini-fridge, a 4k Ultra HD TV, and a luxurious bathroom with a jacuzzi and complimentary toiletries.</p>
-                <p>Price: P20,599 per night</p>
-                <p>Availability: Limited Availability</p>
-                <button onclick="window.location.href='checkout.php?room=suite'">Book</button>
-            </div>
+            <?php foreach ($suiteRooms as $room): ?>
+                <div class="grid-element">
+                    <p>Room Number: <?= htmlspecialchars($room['id']) ?></p>
+                    <p>Price per Night: <?= htmlspecialchars($room['price_per_night']) ?> PHP</p>
+                    <form action="add-to-cart.php" method="post">
+                        <input type="hidden" name="type" value="room">
+                        <input type="hidden" name="id" value="<?= htmlspecialchars($room['id']) ?>">
+                        <input type="hidden" name="name" value="Single Bed Room">
+                        <input type="hidden" name="price" value="<?= htmlspecialchars($room['price_per_night']) ?>">
+                        <label for="nights">Number of Nights:</label>
+                        <input type="number" name="quantity" min="1" max="30" required>
+                        <input type="submit" value="Add to Cart" class="grid-item button-item">
+                    </form>
+                </div>
+            <?php endforeach; ?>
         </div>
     </div>
 </body>
