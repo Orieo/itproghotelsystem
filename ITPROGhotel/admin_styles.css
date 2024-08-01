@@ -1,7 +1,7 @@
 /* admin_styles.css */
 
 body.loggedin {
-    background-color: #f4f4f4;
+    background-color: #0251a5;
     font-family: Arial, sans-serif;
 }
 
@@ -38,6 +38,7 @@ body.loggedin {
 
 .button-container {
     margin-top: 40px;
+    margin-bottom: 40px;
 }
 
 .button-large {

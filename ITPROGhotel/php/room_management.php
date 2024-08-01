@@ -20,7 +20,7 @@ $roomTypes = [
     'Suite' => 1499
 ];
 
-// Function to add a room type
+// Add a room type
 function addRoomType($type, $price, $availability) {
     global $conn;
     $stmt = $conn->prepare("INSERT INTO rooms (type, price_per_night, availability) VALUES (?, ?, ?)");
@@ -29,7 +29,7 @@ function addRoomType($type, $price, $availability) {
     $stmt->close();
 }
 
-// Function to edit a room type
+// Edit a room type
 function editRoomType($id, $type, $price, $availability) {
     global $conn;
     $stmt = $conn->prepare("UPDATE rooms SET type = ?, price_per_night = ?, availability = ? WHERE id = ?");
@@ -38,7 +38,7 @@ function editRoomType($id, $type, $price, $availability) {
     $stmt->close();
 }
 
-// Function to delete a room type
+// Delete a room type
 function deleteRoomType($id) {
     global $conn;
     $stmt = $conn->prepare("DELETE FROM rooms WHERE id = ?");
@@ -47,7 +47,7 @@ function deleteRoomType($id) {
     $stmt->close();
 }
 
-// Function to update room availability
+// Update room availability
 function updateRoomAvailability($id, $availability) {
     global $conn;
     $stmt = $conn->prepare("UPDATE rooms SET availability = ? WHERE id = ?");
@@ -98,180 +98,9 @@ $rooms = getRooms();
 <head>
     <meta charset="utf-8">
     <title>Room Management</title>
-    <link href="../styles.css" rel="stylesheet" type="text/css">
+    <link href="../roommgmt.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer">
-    <style>
-        body {
-            font-family: 'Montserrat', sans-serif;
-            background-color: #f9f9f9;
-            margin: 0;
-            padding: 0;
-        }
 
-        .navtop {
-            background-color: #2f3947;
-            height: 60px;
-            width: 100%;
-            border: 0;
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index: 1000;
-        }
-
-        .navtop div {
-            display: flex;
-            margin: 0 auto;
-            width: 1000px;
-            height: 100%;
-            align-items: center;
-        }
-
-        .navtop div h1, .navtop div a {
-            display: inline-flex;
-            align-items: center;
-        }
-
-        .navtop div h1 {
-            flex: 1;
-            font-size: 24px;
-            padding: 0;
-            margin: 0;
-            color: #eaebed;
-            font-weight: normal;
-        }
-
-        .navtop div a {
-            padding: 0 20px;
-            text-decoration: none;
-            color: #c1c4c8;
-            font-weight: bold;
-        }
-
-        .navtop div a i {
-            padding: 2px 8px 0 0;
-        }
-
-        .navtop div a:hover {
-            color: #eaebed;
-        }
-
-        .container {
-            background-color: white;
-            padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 500px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin: 80px auto; /* Adjusted for fixed navbar */
-        }
-
-        .form-container {
-            width: 100%;
-            display: none;
-        }
-
-        .form-container.active {
-            display: block;
-        }
-
-        .toggle-container {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-        }
-
-        .toggle-container button {
-            background-color: #007BFF;
-            border: none;
-            padding: 10px 20px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 4px 2px;
-            cursor: pointer;
-            border-radius: 25px;
-            color: white;
-            transition: background-color 0.3s ease, transform 0.3s ease;
-        }
-
-        .toggle-container button.active {
-            background-color: #0056b3;
-        }
-
-        .toggle-container button:hover {
-            background-color: #0056b3;
-            transform: scale(1.05);
-        }
-
-        label {
-            display: block;
-            font-size: 14px;
-            margin-top: 10px;
-        }
-
-        select, input[type=number] {
-            width: 100%;
-            padding: 12px;
-            margin-top: 5px;
-            display: inline-block;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-            font-size: 16px;
-        }
-
-        button[type=submit] {
-            background-color: #007BFF;
-            color: white;
-            padding: 14px 20px;
-            margin-top: 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            width: 100%;
-            font-size: 16px;
-            transition: background-color 0.3s ease, transform 0.3s ease;
-        }
-
-        button[type=submit]:hover {
-            background-color: #0056b3;
-            transform: scale(1.05);
-        }
-
-        .error-messages {
-            color: red;
-            margin-top: 10px;
-            font-size: 14px;
-            text-align: left;
-            width: 100%;
-        }
-
-        .success-messages {
-            color: green;
-            margin-top: 10px;
-            font-size: 14px;
-            text-align: left;
-            width: 100%;
-        }
-
-        @media (max-width: 600px) {
-            .container {
-                padding: 20px;
-                width: 100%;
-                max-width: 100%;
-            }
-
-            select, input[type=number], button[type=submit] {
-                padding: 10px;
-                font-size: 14px;
-            }
-        }
-    </style>
     <script>
         function showForm(formId) {
             const forms = document.querySelectorAll('.form-container');

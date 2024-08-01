@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 01, 2024 at 11:17 AM
+-- Generation Time: Aug 01, 2024 at 02:39 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -30,7 +30,9 @@ SET time_zone = "+00:00";
 CREATE TABLE `amenities` (
   `id` int(11) NOT NULL,
   `name` varchar(100) NOT NULL,
-  `price` decimal(10,2) NOT NULL
+  `price` decimal(10,2) NOT NULL,
+  `description` text DEFAULT NULL,
+  `image` mediumblob NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -76,6 +78,13 @@ CREATE TABLE `rooms` (
   `availability` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `rooms`
+--
+
+INSERT INTO `rooms` (`id`, `type`, `price_per_night`, `availability`) VALUES
+(1, 'Single', 799.00, 0);
+
 -- --------------------------------------------------------
 
 --
@@ -92,6 +101,14 @@ CREATE TABLE `user` (
   `profilePicture` mediumblob NOT NULL,
   `admin_checker` int(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `user`
+--
+
+INSERT INTO `user` (`id`, `firstName`, `lastName`, `email`, `phoneNumber`, `password`, `profilePicture`, `admin_checker`) VALUES
+(1, 'ulrekt', 'perez', 'ulrekt@gmail.com', '09495935678', '$2y$10$jHEh5aJ3pdeFscIAbE1hEusG6KyfyO3dfBNvCvvyr6uRyUbDMuns2', 0x75706c6f6164732f736b69707065726661742e706e67, 1),
+(2, 'ricky', 'reyes', 'ulrek2t@gmail.com', '09495935678', '$2y$10$HySF.ZqVx1UzBFzw64XOLuVdgfy4AG0w4Z3oWttTr8iZjyJ5dfwKu', 0x75706c6f6164732f736b69707065726661742e706e67, 0);
 
 --
 -- Indexes for dumped tables
@@ -139,7 +156,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `amenities`
 --
 ALTER TABLE `amenities`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `bookings`
@@ -157,13 +174,13 @@ ALTER TABLE `booking_details`
 -- AUTO_INCREMENT for table `rooms`
 --
 ALTER TABLE `rooms`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Constraints for dumped tables
