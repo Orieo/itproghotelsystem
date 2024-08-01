@@ -5,10 +5,8 @@ if (!isset($_SESSION['loggedin'])) {
     exit;
 }
 
-// Debugging session variables
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-var_dump($_SESSION);
+// Get the final price from the session
+$finalPrice = isset($_SESSION['finalPrice']) ? $_SESSION['finalPrice'] : 0;
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Save booking details to the database
@@ -25,25 +23,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Insert booking into bookings table
     $stmt = $conn->prepare("INSERT INTO bookings (user_id, user_name, contact, total_price, booked_at) VALUES (?, ?, ?, ?, NOW())");
-    $totalPrice = 0;
-    foreach ($bookingDetails as $item) {
-        $totalPrice += $item['price'] * $item['quantity'];
-    }
-    $stmt->bind_param("issd", $userId, $customerName, $contactDetails, $totalPrice);
+    $stmt->bind_param("issd", $userId, $customerName, $contactDetails, $finalPrice);
     $stmt->execute();
     $bookingId = $stmt->insert_id;
     $stmt->close();
 
-    // Insert booking details into booking_details table
+    // Insert booking details into booking_details table and update room availability
     foreach ($bookingDetails as $item) {
-        $stmt = $conn->prepare("INSERT INTO booking_details (booking_id, room_id, quantity, price) VALUES (?, ?, ?, ?)");
-        $stmt->bind_param("iiid", $bookingId, $item['id'], $item['quantity'], $item['price']);
-        $stmt->execute();
-        $stmt->close();
+        $roomId = $item['type'] === 'room' ? $item['id'] : NULL; // Use NULL or an appropriate placeholder for non-room items
+        if ($roomId !== NULL) {
+            $stmt = $conn->prepare("INSERT INTO booking_details (booking_id, room_id, quantity, price) VALUES (?, ?, ?, ?)");
+            $stmt->bind_param("iiid", $bookingId, $roomId, $item['quantity'], $item['price']);
+            $stmt->execute();
+            $stmt->close();
+
+            // Update room availability to unavailable
+            $stmt = $conn->prepare("UPDATE rooms SET availability = 1 WHERE id = ?");
+            $stmt->bind_param("i", $roomId);
+            $stmt->execute();
+            $stmt->close();
+        }
     }
 
     // Clear booking session
     unset($_SESSION['booking']);
+    unset($_SESSION['finalPrice']);
 
     $conn->close();
 
@@ -73,9 +77,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </nav>
     <div class="content">
         <h2>Confirm Your Booking</h2>
-        <form action="checkout.php" method="post">
-            <h3>Final Price: <?= htmlspecialchars($totalPrice) ?> PHP</h3>
-            <input type="submit" value="Confirm Booking" class="grid-item button-item">
+        <form method="post" action="">
+            <p>Total Price: <?= htmlspecialchars($finalPrice) ?> PHP</p>
+            <input type="submit" value="Confirm Booking" class="button-item">
         </form>
     </div>
 </body>

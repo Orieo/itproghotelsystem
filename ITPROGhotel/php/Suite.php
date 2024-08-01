@@ -48,7 +48,7 @@ $conn->close();
                     <form action="add-to-cart.php" method="post">
                         <input type="hidden" name="type" value="room">
                         <input type="hidden" name="id" value="<?= htmlspecialchars($room['id']) ?>">
-                        <input type="hidden" name="name" value="Single Bed Room">
+                        <input type="hidden" name="name" value="Suite">
                         <input type="hidden" name="price" value="<?= htmlspecialchars($room['price_per_night']) ?>">
                         <label for="nights">Number of Nights:</label>
                         <input type="number" name="quantity" min="1" max="30" required>

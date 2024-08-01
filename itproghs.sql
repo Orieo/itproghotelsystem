@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 01, 2024 at 02:39 PM
+-- Generation Time: Aug 01, 2024 at 04:23 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -34,6 +34,16 @@ CREATE TABLE `amenities` (
   `description` text DEFAULT NULL,
   `image` mediumblob NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `amenities`
+--
+
+INSERT INTO `amenities` (`id`, `name`, `price`, `description`, `image`) VALUES
+(3, 'Breakfast Buffet', 279.00, 'Breakfast Buffet for 1 person (6 AM - 10AM)', ''),
+(4, 'Spa Access', 599.00, 'Includes All spa services', ''),
+(5, 'High Speed Wifi', 175.00, 'Cost is per day (MAX 300 mbps)', ''),
+(6, 'Parking', 60.00, 'Vertical Clearance: 5.0 Meters', '');
 
 -- --------------------------------------------------------
 
@@ -83,7 +93,19 @@ CREATE TABLE `rooms` (
 --
 
 INSERT INTO `rooms` (`id`, `type`, `price_per_night`, `availability`) VALUES
-(1, 'Single', 799.00, 0);
+(1, 'Suite', 1499.00, 0),
+(2, 'Single', 799.00, 0),
+(3, 'Single', 799.00, 0),
+(4, 'Single', 799.00, 0),
+(5, 'Single', 799.00, 0),
+(6, 'Double', 999.00, 0),
+(7, 'Double', 999.00, 0),
+(8, 'Double', 999.00, 0),
+(9, 'Double', 999.00, 0),
+(10, 'Double', 999.00, 0),
+(11, 'Suite', 1499.00, 0),
+(12, 'Suite', 1499.00, 0),
+(13, 'Suite', 1499.00, 0);
 
 -- --------------------------------------------------------
 
@@ -108,7 +130,9 @@ CREATE TABLE `user` (
 
 INSERT INTO `user` (`id`, `firstName`, `lastName`, `email`, `phoneNumber`, `password`, `profilePicture`, `admin_checker`) VALUES
 (1, 'ulrekt', 'perez', 'ulrekt@gmail.com', '09495935678', '$2y$10$jHEh5aJ3pdeFscIAbE1hEusG6KyfyO3dfBNvCvvyr6uRyUbDMuns2', 0x75706c6f6164732f736b69707065726661742e706e67, 1),
-(2, 'ricky', 'reyes', 'ulrek2t@gmail.com', '09495935678', '$2y$10$HySF.ZqVx1UzBFzw64XOLuVdgfy4AG0w4Z3oWttTr8iZjyJ5dfwKu', 0x75706c6f6164732f736b69707065726661742e706e67, 0);
+(2, 'ricky', 'reyes', 'ulrek2t@gmail.com', '09495935678', '$2y$10$HySF.ZqVx1UzBFzw64XOLuVdgfy4AG0w4Z3oWttTr8iZjyJ5dfwKu', 0x75706c6f6164732f736b69707065726661742e706e67, 0),
+(3, 'Yves', 'Jimenez', 'yvesandrei02@gmail.com', '09173175660', '$2y$10$QwbO7YlEF6eD.sOazH7BXuHafjATKXd0BfV1VqKafWalEEzYmpNDO', 0x75706c6f6164732f324b734d614b694d6d4d6562453332756b4858585a372e6a7067, 1),
+(4, 'Alvin', 'Jimenez', 'yvesandrei0323@gmail.com', '09173175660', '$2y$10$DaOkBP1JaC3LEDlKhKH4L.QKtNeQCtZJ13KxtdaKjwsiUDEpe01Uq', 0x75706c6f6164732f616b617473756b692e6a7067, 0);
 
 --
 -- Indexes for dumped tables
@@ -156,31 +180,31 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `amenities`
 --
 ALTER TABLE `amenities`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `bookings`
 --
 ALTER TABLE `bookings`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `booking_details`
 --
 ALTER TABLE `booking_details`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT for table `rooms`
 --
 ALTER TABLE `rooms`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Constraints for dumped tables
