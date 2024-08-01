@@ -64,7 +64,7 @@ if (!isset($_SESSION['loggedin'])) {
                 <div class = "grid-element">
                     <h3> Amenities </h3>
                     <p> List of available amenities </p>
-                    <a href="Amenities.php" class="grid-item button-item">Click Me</a>
+                    <a href="amenities.php" class="grid-item button-item">Click Me</a>
                 </div>
                 <div class = "grid-element">
                     <h3> Checkout </h3>
