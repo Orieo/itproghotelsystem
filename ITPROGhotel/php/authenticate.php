@@ -23,7 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['email'], $_POST['passw
         return;
     }
 
-    $sql = "SELECT password, admin_checker FROM user WHERE email = ?";
+    $sql = "SELECT id, firstName, lastName, phoneNumber, password, admin_checker FROM user WHERE email = ?";
     $stmt = $conn->prepare($sql);
 
     if ($stmt) {
@@ -31,7 +31,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['email'], $_POST['passw
 
         if ($stmt->execute()) {
             $stmt->store_result();
-            $stmt->bind_result($hashedPassword, $admin_checker);
+            $stmt->bind_result($id, $firstName, $lastName, $phoneNumber, $hashedPassword, $admin_checker);
             $stmt->fetch();
 
             if ($stmt->num_rows > 0) { 
@@ -48,7 +48,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['email'], $_POST['passw
                 if ($_SESSION[$email]['login_attempts'] < 4) {
                     if ($hashedPassword && password_verify($password, $hashedPassword)) {
                         $_SESSION['loggedin'] = true;
+                        $_SESSION['id'] = $id;
                         $_SESSION['email'] = $email;
+                        $_SESSION['firstName'] = $firstName;
+                        $_SESSION['lastName'] = $lastName;
+                        $_SESSION['phoneNumber'] = $phoneNumber;
 
                         $response = array(
                             "success" => true,
