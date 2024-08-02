@@ -10,12 +10,12 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-$stmt = $conn->prepare("SELECT * FROM rooms WHERE type = 'Suite' AND availability = 0");
+// Fetch available Single Bed rooms
+$stmt = $conn->prepare("SELECT * FROM rooms WHERE type = 'Single' AND availability = 0");
 $stmt->execute();
 $result = $stmt->get_result();
-$suiteRooms = $result->fetch_all(MYSQLI_ASSOC);
+$singleRooms = $result->fetch_all(MYSQLI_ASSOC);
 $stmt->close();
-
 $conn->close();
 ?>
 
@@ -23,7 +23,7 @@ $conn->close();
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Suite Rooms</title>
+    <title>Single-Bedrooms</title>
     <link href="rooms.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -45,11 +45,11 @@ $conn->close();
         </div>
     </nav>
 
-    <div class="content">  
+    <div class="content">
         <p><a href="room-selection.php" class="back-btn"> ← Return to Room Selection</a></p>
-        <h2>Available Suite Rooms</h2>
+        <h2>Available Single-Bedrooms</h2>
         <h2></h2>
-        <h2>Experience the ultimate in luxury with our spacious suite. This room features a king-size bed with premium linens, a separate living area, a mini-fridge, a 4k Ultra HD smart TV, and a luxurious bathroom with a jacuzzi and high-end complimentary toiletries.</h2>
+        <h2>Designed for comfort and style. It includes a single bed with cool and soft foam mattress, a medium sized reading desk, a bathroom, a HD smart tv, and a large window view.</h2>
         <table class="rooms-table">
             <thead>
                 <tr>
@@ -61,11 +61,11 @@ $conn->close();
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($suiteRooms as $room): ?>
+                <?php foreach ($singleRooms as $room): ?>
                     <tr>
                         <td><?= htmlspecialchars($room['id']) ?></td>
                         <!-- yeah idk what im doing -->
-                        <td><img src="uploads/Luxury-Suite.png"width="300"></td>  
+                        <td><img src="uploads/Luxury.png"width="300"></td> 
                         <td><?= htmlspecialchars($room['price_per_night']) ?> PHP</td>
                         <td>
                             <form action="add-to-cart.php" method="post">

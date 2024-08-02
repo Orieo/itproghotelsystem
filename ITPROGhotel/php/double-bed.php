@@ -48,6 +48,8 @@ $conn->close();
     <div class="content">
         <p><a href="room-selection.php" class="back-btn"> ← Return to Room Selection</a></p>
         <h2>Available Double-Bedrooms</h2>
+        <h2></h2>
+        <h2>Our double bed room offers comfort and style. It includes two very comfortable memory foam beds, a compact workspace, bathroom, a full HD smart TV, and a large window with city views.</h2>
         <table class="rooms-table">
             <thead>
                 <tr>
@@ -63,7 +65,7 @@ $conn->close();
                     <tr>
                         <td><?= htmlspecialchars($room['id']) ?></td>
                         <!-- yeah idk what im doing -->
-                        <td><img src="<?= htmlspecialchars($room['image_path']) ?>"width="50"></td> 
+                        <td><img src="uploads/Luxury-doublebed.png"width="300"></td>  
                         <td><?= htmlspecialchars($room['price_per_night']) ?> PHP</td>
                         <td>
                             <form action="add-to-cart.php" method="post">
