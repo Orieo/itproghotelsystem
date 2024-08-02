@@ -5,6 +5,8 @@ body {
     background-color: #f3f4f7;
 }
 
+
+/* Navigation Bar */
 .navtop {
     background-color: #2f3947;
     height: 60px;
@@ -47,6 +49,7 @@ body {
 .navtop div a:hover {
     color: #eaebed;
 }
+
 
 .content {
     width: 1000px;

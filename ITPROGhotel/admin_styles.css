@@ -1,34 +1,61 @@
 /* admin_styles.css */
 
 body.loggedin {
-    background-color: #0251a5;
+    background-color: #f3f4f7;
+    margin: 0;
+    padding: 0;
     font-family: Arial, sans-serif;
+}
+
+/* Navigation Bar */
+.navtop {
+    background-color: #2f3947;
+    height: 60px;
+    width: 100%;
+    border: 0;
 }
 
 .navtop div {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 1000px;
-    padding: 0 20px;
     margin: 0 auto;
+    width: 1000px;
+    height: 100%;
 }
 
-.navtop h1, .navtop a {
-    color: #fff;
-    text-decoration: none;
-    margin: 0;
+.navtop div h1, .navtop div a {
+    display: inline-flex;
+    align-items: center;
+}
+
+.navtop div h1 {
+    flex: 1;
+    font-size: 24px;
     padding: 0;
-    line-height: 60px;
+    margin: 0;
+    color: #fff;
+    font-weight: normal;
 }
 
-.navtop a {
-    padding: 0 10px;
+.navtop div a {
+    padding: 0 20px;
+    text-decoration: none;
+    color: #fff;
+    font-weight: bold;
 }
+
+.navtop div a i {
+    padding: 2px 8px 0 0;
+}
+
+.navtop div a:hover {
+    text-decoration: underline;
+    color: #eaebed;
+}
+
 
 .content {
     width: 1000px;
-    margin: 20px auto;
+    margin: 10% auto;
     padding: 20px;
     background-color: #fff;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);

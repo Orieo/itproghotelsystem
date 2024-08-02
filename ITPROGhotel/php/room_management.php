@@ -141,13 +141,14 @@ $rooms = getRooms();
 </head>
 <body>
     <nav class="navtop">
-        <div>
-            <h1>MotelEase</h1>
-            <a href="admin_home.php">Admin Home</a>
-            <a href="admin_profile.php"><i class="fas fa-user-circle"></i>Admin Profile</a>
-            <a href="logout.php"><i class="fas fa-sign-out-alt"></i>Logout</a>
-        </div>
-    </nav>
+            <div>
+                <h1>MotelEase Admin</h1>
+                <a href="admin_home.php">Home</a>
+                <a href="admin_profile.php"><i class="fas fa-user-circle"></i>Profile</a>
+                <a href="logout.php"><i class="fas fa-sign-out-alt"></i>Logout</a>
+            </div>
+        </nav>
+
     <div class="container">
         <h2>Room Management</h2>
         <?php if (!empty($success)): ?>

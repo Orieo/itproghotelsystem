@@ -31,15 +31,15 @@ $conn->close();
 	<head>
 		<meta charset="utf-8">
 		<title>Profile Page</title>
-		<link href="../profile.css" rel="stylesheet" type="text/css">
+		<link href="../admin-profile.css" rel="stylesheet" type="text/css">
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
 	</head>
 	<body class="loggedin">
 		<nav class="navtop">
 			<div>
-				<h1>MotelEase</h1>
-				<a href="admin_home.php">Admin Home</a>
-				<a href="admin_profile.php"><i class="fas fa-user-circle"></i>Admin Profile</a>
+				<h1>MotelEase Admin</h1>
+				<a href="admin_home.php">Home</a>
+				<a href="admin_profile.php"><i class="fas fa-user-circle"></i>Profile</a>
 				<a href="logout.php"><i class="fas fa-sign-out-alt"></i>Logout</a>
 			</div>
 		</nav>

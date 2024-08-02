@@ -16,9 +16,9 @@ if (!isset($_SESSION['loggedin'])) {
     <body class="loggedin">
         <nav class="navtop">
             <div>
-                <h1>MotelEase</h1>
-                <a href="admin_home.php">Admin Home</a>
-                <a href="admin_profile.php"><i class="fas fa-user-circle"></i>Admin Profile</a>
+                <h1>MotelEase Admin</h1>
+                <a href="admin_home.php">Home</a>
+                <a href="admin_profile.php"><i class="fas fa-user-circle"></i>Profile</a>
                 <a href="logout.php"><i class="fas fa-sign-out-alt"></i>Logout</a>
             </div>
         </nav>
