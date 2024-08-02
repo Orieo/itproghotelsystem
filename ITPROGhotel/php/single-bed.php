@@ -15,6 +15,11 @@ $stmt = $conn->prepare("SELECT * FROM rooms WHERE type = 'Single' AND availabili
 $stmt->execute();
 $result = $stmt->get_result();
 $singleRooms = $result->fetch_all(MYSQLI_ASSOC);
+
+// echo "<pre>";
+// print_r($singleRooms);
+// echo "</pre>";
+
 $stmt->close();
 $conn->close();
 ?>
@@ -63,13 +68,13 @@ $conn->close();
             <tbody>
                 <?php foreach ($singleRooms as $room): ?>
                     <tr>
-                        <td><?= htmlspecialchars($room['id']) ?></td>
+                        <td><?= htmlspecialchars($room['room_number']) ?></td>
                         <td><img src="uploads/Luxury.png"width="300"></td> 
                         <td><?= htmlspecialchars($room['price_per_night']) ?> PHP</td>
                         <td>
                             <form action="add-to-cart.php" method="post">
                                 <input type="hidden" name="type" value="room">
-                                <input type="hidden" name="id" value="<?= htmlspecialchars($room['id']) ?>">
+                                <input type="hidden" name="room_number" value="<?= htmlspecialchars($room['room_number']) ?>">
                                 <input type="hidden" name="name" value="Single Bed Room">
                                 <input type="hidden" name="price" value="<?= htmlspecialchars($room['price_per_night']) ?>">
                                 <input type="number" name="quantity" min="1" max="30" required>
