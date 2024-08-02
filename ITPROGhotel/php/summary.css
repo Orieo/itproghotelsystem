@@ -22,8 +22,9 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-color: yellow; /*debugging*/
-    border-style: solid;
+    /*debugging*/
+    /* border-color: yellow; 
+    border-style: solid; */
     margin-right: 20px;
     margin-left: 20px;
     margin-top: 20px;
@@ -41,8 +42,9 @@ body {
     color: #e08679;
     font-weight: bold;
     background-color: #fcebcd;
-    border-color: blue; /*debugging*/
-    border-style: solid;
+    /*debugging*/
+    /* border-color: blue; 
+    border-style: solid; */
     border-radius: 20px;
     padding: 10px 20px;
 }

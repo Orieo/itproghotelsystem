@@ -133,7 +133,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         Checkout
     </div>
     <nav class="navtop">
-        <a href="home.php"><img src="path_to_logo_image" alt="MotelEase Logo"></a>
+        <a href="home.php"><img src="motel-ease_logo.png"></a>
         <div>
             <a href="aboutus.html" class="about-us">About us</a>
             <a href="profile.php"><i class="fas fa-user-circle"></i> Profile</a>

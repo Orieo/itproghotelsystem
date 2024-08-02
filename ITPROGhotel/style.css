@@ -3,12 +3,10 @@ body {
     background-color: #f9f9f9;
     display: flex;
     flex-direction: column;
-    /**/
     justify-content: center;
     align-items: center;
     height: 100vh;
     margin: 0;
-    /**/
     text-align: center;
 }
 
@@ -56,7 +54,6 @@ h2{
     display: inline-block;
     font-size: 16px;
     font-weight: bold;
-    /* margin: 4px 2px; */
     margin: 8px 0;
     cursor: pointer;
     border-radius: 25px;
@@ -65,9 +62,7 @@ h2{
     transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
-/* .toggle-container button.active {
-    background-color: orange;
-} */
+
 
 .toggle-container button:hover {
     background-color: orange;
@@ -92,24 +87,6 @@ input[type=text], input[type=email], input[type=password], input[type=tel], inpu
     font-size: 16px;
 }
 
-/* button[type=submit] {
-    background-color: #007BFF;
-    color: white;
-    padding: 14px 20px;
-    margin: 8px 0;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    width: 100%;
-    font-size: 16px;
-    transition: background-color 0.3s ease, transform 0.3s ease;
-} 
-
-button[type=submit]:hover {
-    background-color: #0056b3;
-    transform: scale(1.05);
-} */
-
 button[type=submit] {
     background-color: #FFA458;
     border: none;
@@ -119,7 +96,6 @@ button[type=submit] {
     display: inline-block;
     font-size: 16px;
     font-weight: bold;
-    /* margin: 4px 2px; */
     margin: 8px 0;
     cursor: pointer;
     border-radius: 25px;
@@ -128,9 +104,6 @@ button[type=submit] {
     transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
-/* button[type=submit]active {
-    background-color: #0056b3;
-} */
 
 button[type=submit]:hover {
     background-color: orange;

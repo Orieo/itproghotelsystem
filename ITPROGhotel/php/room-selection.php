@@ -49,7 +49,7 @@ $conn->close();
     <nav class="navtop">
         <div class="nav-container">
             <div class="logo">
-                <a href="home.php"><img src="" alt="MotelEase Logo"></a>
+                <a href="home.php"><img src="motel-ease_logo.png"></a>
             </div>
             <div class="nav-links">
                 <a href="aboutus.html" class="nav-link">About us</a>
@@ -58,15 +58,6 @@ $conn->close();
             </div>
         </div>
     </nav>
-
-    <!-- <nav class="sidebar">
-        <a href="home.php"> <img src="" alt="MotelEase Logo"> </a>
-        <a href="aboutus.html" class="about-us">About us</a>
-        <div class="sidebar-bottom">
-            <a href="profile.php"><i class="fas fa-user-circle"></i>Profile</a>
-            <a href="logout.php"><i class="fas fa-sign-out-alt"></i>Logout</a>
-        </div>
-    </nav> -->
 
     <div class="content">
         <div class="grid-container">
