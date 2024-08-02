@@ -101,20 +101,27 @@ $_SESSION['finalPrice'] = $finalPrice;
 <head>
     <meta charset="utf-8">
     <title>Booking Summary</title>
-    <link href="../styles.css" rel="stylesheet" type="text/css">
+    <link href="summary.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lalezar&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body class="loggedin">
-    <div class="header">
-        <h1>Booking Summary</h1>
-    </div>
-    <nav class="sidebar">
-        <a href="home.php"><img src="" alt="MotelEase Logo"></a>
-        <a href="aboutus.html" class="about-us">About us</a>
-        <div class="sidebar-bottom">
-            <a href="profile.php"><i class="fas fa-user-circle"></i>Profile</a>
-            <a href="logout.php"><i class="fas fa-sign-out-alt"></i>Logout</a>
+    <nav class="navtop">
+        <div class="nav-container">
+            <div class="logo">
+                <a href="home.php"><img src="" alt="MotelEase Logo"></a>
+            </div>
+            <div class="nav-links">
+                <a href="aboutus.html" class="nav-link">About us</a>
+                <a href="profile.php" class="nav-link"><i class="fas fa-user-circle"></i> Profile</a>
+                <a href="logout.php" class="nav-link"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </div>
         </div>
     </nav>
+
     <div class="content">
         <h2>Your Booking Details</h2>
         <div class="grid-container">
@@ -130,15 +137,23 @@ $_SESSION['finalPrice'] = $finalPrice;
                 </div>
             <?php endforeach; ?>
         </div>
-        <h3>Total Price: <?= htmlspecialchars($totalPrice) ?> PHP</h3>
-        <h3>Discount (<?= htmlspecialchars($promoApplied) ?>): <?= htmlspecialchars($discount) ?> PHP</h3>
-        <h3>Final Price: <?= htmlspecialchars($finalPrice) ?> PHP</h3>
-        <a href="amenities.php" class="grid-item button-item">Add Amenities</a>
-        <a href="room-selection.php" class="grid-item button-item">Add more rooms</a>
-        <a href="checkout.php" class="grid-item button-item">Proceed to Checkout</a>
-        <form method="post" style="display: inline;">
-            <input type="submit" name="cancel" value="Cancel Booking" class="button-item">
-        </form>
+        <div class="flex-container">
+            <div class = "price-breakdown">
+                <h3>Total Price: <?= htmlspecialchars($totalPrice) ?> PHP</h3>
+                <h3>Discount (<?= htmlspecialchars($promoApplied) ?>): <?= htmlspecialchars($discount) ?> PHP</h3>
+                <h3>Final Price: <?= htmlspecialchars($finalPrice) ?> PHP</h3>
+            </div>
+            <div class="button-container">
+                <a href="amenities.php" class="button-item">Add Amenities</a>
+                <a href="room-selection.php" class="button-item">Add more rooms</a>
+            </div>
+        </div>
+            <div class="confirmation-buttons">
+            <a href="checkout.php" class="button-item">Proceed to Checkout</a>
+            <form method="post" >
+                <input type="submit" name="cancel" value="Cancel Booking" class="button-item">
+            </form>
+            </div>
     </div>
 </body>
 </html>
