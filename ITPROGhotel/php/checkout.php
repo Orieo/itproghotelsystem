@@ -62,17 +62,82 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta charset="utf-8">
     <title>Checkout</title>
     <link href="../styles.css" rel="stylesheet" type="text/css">
+    <style>
+        body {
+            font-family: 'IBM Plex Sans Thai', sans-serif;
+            background-color: #FFEECC;
+            color: #333;
+        }
+
+        .header {
+            background-color: #FF5733;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+            font-size: 2em;
+            font-family: 'Poppins', sans-serif; /* Use the Poppins font */
+        }
+
+        .navtop {
+            background-color: #333;
+            color: #FFD8A9;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navtop a {
+            color: #FFD8A9;
+            text-decoration: none;
+            padding: 0 15px;
+        }
+
+        .navtop a:hover {
+            color: #FFEECC;
+        }
+
+        .content {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .content h2 {
+            font-size: 2em;
+            color: #FF5733;
+        }
+
+        .content p {
+            font-size: 1.2em;
+            color: #333;
+        }
+
+        .button-item {
+            background-color: #333;
+            color: #FFD8A9;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1em;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        .button-item:hover {
+            background-color: #575757;
+        }
+    </style>
 </head>
 <body class="loggedin">
     <div class="header">
-        <h1>Checkout</h1>
+        Checkout
     </div>
-    <nav class="sidebar">
-        <a href="home.php"><img src="" alt="MotelEase Logo"></a>
-        <a href="aboutus.html" class="about-us">About us</a>
-        <div class="sidebar-bottom">
-            <a href="profile.php"><i class="fas fa-user-circle"></i>Profile</a>
-            <a href="logout.php"><i class="fas fa-sign-out-alt"></i>Logout</a>
+    <nav class="navtop">
+        <a href="home.php"><img src="path_to_logo_image" alt="MotelEase Logo"></a>
+        <div>
+            <a href="aboutus.html" class="about-us">About us</a>
+            <a href="profile.php"><i class="fas fa-user-circle"></i> Profile</a>
+            <a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
         </div>
     </nav>
     <div class="content">
