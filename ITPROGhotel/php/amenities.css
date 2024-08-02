@@ -110,7 +110,7 @@ body {
     width: 100%;
     border-collapse: collapse;
     margin-left: 8%;
-    background-color: #e6f2f5;
+    background-color: #f3e5f5;
     color: #1d1d1d;
     /*debugging*/
     /* border-color: green; 
@@ -118,29 +118,29 @@ body {
 }
 
 .rooms-table th {
-    background-color: #cce7ea;
+    background-color: #e1bee7;
 }
 
 .rooms-table th, .rooms-table td {
     padding: 10px;
     text-align: left;
     /* Column divider */
-    border-bottom: 1px solid #C6C1C1;
-    border-top: 1px solid #C6C1C1; 
+    border-bottom: 1px solid #ce93d8;
+    border-top: 1px solid #ce93d8; 
     
 }
 
 .rooms-table th:not(:first-child), .rooms-table td:not(:first-child) {
-    border-left: 1px solid #C6C1C1; /* Column divider */
+    border-left: 1px solid #ce93d8; /* Column divider */
 }
 
 .rooms-table th:not(:last-child), .rooms-table td:not(:last-child) {
-    border-right: 1px solid #C6C1C1; /* Column divider */
+    border-right: 1px solid #ce93d8; /* Column divider */
 }
 
 
 .button-item {
-    background-color: #1982af;
+    background-color: #6a1b9a;
     color: white;
     border: none;
     width: 100%;
@@ -153,7 +153,7 @@ body {
 }
 
 .button-item:hover {
-    background-color: #167097;
+    background-color: #4a148c;
 }
 
 
