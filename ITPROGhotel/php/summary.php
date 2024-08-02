@@ -51,7 +51,7 @@ foreach ($bookingDetails as $item) {
         case 'Double Bed Room':
             $hasDoubleRoom = true;
             break;
-        case 'Suite':
+        case 'Suite Bed Room':
             $hasSuite = true;
             break;
         case 'Breakfast Buffet':
@@ -84,10 +84,10 @@ if ($hasSingleRoom && $hasBreakfastBuffet) {
     $promoApplied = 'Double Room + Parking';
 } elseif ($hasSuite && $hasBreakfastBuffet && $hasParking) {
     $discount = 0.15 * $totalPrice;
-    $promoApplied = 'Suite + Breakfast Buffet + Parking';
+    $promoApplied = 'Suite Bed Room + Breakfast Buffet + Parking';
 } elseif ($hasSuite && $hasBreakfastBuffet && $hasSpaAccess && $hasParking) {
     $discount = 0.20 * $totalPrice;
-    $promoApplied = 'Suite + Breakfast Buffet + Spa Access + Parking';
+    $promoApplied = 'Suite Bed Room + Breakfast Buffet + Spa Access + Parking';
 }
 
 $finalPrice = $totalPrice - $discount;
@@ -112,7 +112,7 @@ $_SESSION['finalPrice'] = $finalPrice;
     <nav class="navtop">
         <div class="nav-container">
             <div class="logo">
-                <a href="home.php"><img src="motel-ease_logo.png"></a>
+                <a href="home.php"><img src="uploads/motel-ease_logo.png"></a>
             </div>
             <div class="nav-links">
                 <a href="aboutus.html" class="nav-link">About us</a>

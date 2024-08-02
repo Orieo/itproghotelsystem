@@ -30,7 +30,7 @@ if (!isset($_SESSION['loggedin'])) {
     <nav class="navtop">
         <div class="nav-container">
             <div class="logo">
-                <a href="home.php"><img src="motel-ease_logo.png"></a>
+                <a href="home.php"><img src="uploads/motel-ease_logo.png"></a>
             </div>
             <div class="nav-links">
                 <a href="aboutus.html" class="nav-link">About us</a>

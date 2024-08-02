@@ -35,7 +35,7 @@ $conn->close();
     <nav class="navtop">
         <div class="nav-container">
             <div class="logo">
-                <a href="home.php"><img src="motel-ease_logo.png"></a>
+                <a href="home.php"><img src="uploads/motel-ease_logo.png"></a>
             </div>
             <div class="nav-links">
                 <a href="aboutus.html" class="nav-link">About us</a>
@@ -64,7 +64,7 @@ $conn->close();
                 <?php foreach ($suiteRooms as $room): ?>
                     <tr>
                         <td><?= htmlspecialchars($room['room_number']) ?></td>
-                        <td><img src="uploads/Luxury-Suite.png"width="300"></td>  
+                        <td><img src="<?= $room['image'] ?>"width="300"></td>  
                         <td><?= htmlspecialchars($room['price_per_night']) ?> PHP</td>
                         <td>
                             <form action="add-to-cart.php" method="post">

@@ -32,6 +32,9 @@ if (!isset($_SESSION['loggedin'])) {
             <div class="button-container">
                 <a href="amenities_management.php" class="button-large"><i class="fas fa-cogs"></i> Amenities Management</a>
             </div>
+            <div class="button-container">
+                <a href="report_generation.php" class="button-large"><i class="fas fa-cogs"></i> Report Generation</a>
+            </div>
         </div>
     </body>
 </html>
