@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 01, 2024 at 04:23 PM
+-- Generation Time: Aug 02, 2024 at 12:00 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -43,7 +43,8 @@ INSERT INTO `amenities` (`id`, `name`, `price`, `description`, `image`) VALUES
 (3, 'Breakfast Buffet', 279.00, 'Breakfast Buffet for 1 person (6 AM - 10AM)', ''),
 (4, 'Spa Access', 599.00, 'Includes All spa services', ''),
 (5, 'High Speed Wifi', 175.00, 'Cost is per day (MAX 300 mbps)', ''),
-(6, 'Parking', 60.00, 'Vertical Clearance: 5.0 Meters', '');
+(6, 'Parking', 60.00, 'Vertical Clearance: 5.0 Meters', ''),
+(7, 'asd', 12.00, 'sd', 0x75706c6f6164732f736b69707065726661742e706e67);
 
 -- --------------------------------------------------------
 
@@ -85,27 +86,16 @@ CREATE TABLE `rooms` (
   `id` int(11) NOT NULL,
   `type` varchar(50) DEFAULT NULL,
   `price_per_night` decimal(10,2) DEFAULT NULL,
-  `availability` int(11) DEFAULT NULL
+  `availability` int(11) DEFAULT NULL,
+  `image` mediumblob NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `rooms`
 --
 
-INSERT INTO `rooms` (`id`, `type`, `price_per_night`, `availability`) VALUES
-(1, 'Suite', 1499.00, 0),
-(2, 'Single', 799.00, 0),
-(3, 'Single', 799.00, 0),
-(4, 'Single', 799.00, 0),
-(5, 'Single', 799.00, 0),
-(6, 'Double', 999.00, 0),
-(7, 'Double', 999.00, 0),
-(8, 'Double', 999.00, 0),
-(9, 'Double', 999.00, 0),
-(10, 'Double', 999.00, 0),
-(11, 'Suite', 1499.00, 0),
-(12, 'Suite', 1499.00, 0),
-(13, 'Suite', 1499.00, 0);
+INSERT INTO `rooms` (`id`, `type`, `price_per_night`, `availability`, `image`) VALUES
+(1, 'Suite', 1499.00, 0, '');
 
 -- --------------------------------------------------------
 
@@ -180,7 +170,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `amenities`
 --
 ALTER TABLE `amenities`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `bookings`
@@ -198,7 +188,7 @@ ALTER TABLE `booking_details`
 -- AUTO_INCREMENT for table `rooms`
 --
 ALTER TABLE `rooms`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `user`

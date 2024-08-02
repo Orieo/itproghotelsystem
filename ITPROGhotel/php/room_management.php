@@ -21,19 +21,24 @@ $roomTypes = [
 ];
 
 // Add a room type
-function addRoomType($type, $price, $availability) {
+function addRoomType($type, $price, $availability, $image) {
     global $conn;
-    $stmt = $conn->prepare("INSERT INTO rooms (type, price_per_night, availability) VALUES (?, ?, ?)");
-    $stmt->bind_param("sii", $type, $price, $availability);
+    $stmt = $conn->prepare("INSERT INTO rooms (type, price_per_night, availability, image) VALUES (?, ?, ?, ?)");
+    $stmt->bind_param("sibs", $type, $price, $availability, $image);
     $stmt->execute();
     $stmt->close();
 }
 
 // Edit a room type
-function editRoomType($id, $type, $price, $availability) {
+function editRoomType($id, $type, $price, $availability, $image = null) {
     global $conn;
-    $stmt = $conn->prepare("UPDATE rooms SET type = ?, price_per_night = ?, availability = ? WHERE id = ?");
-    $stmt->bind_param("siii", $type, $price, $availability, $id);
+    if ($image) {
+        $stmt = $conn->prepare("UPDATE rooms SET type = ?, price_per_night = ?, availability = ?, image = ? WHERE id = ?");
+        $stmt->bind_param("sibsi", $type, $price, $availability, $image, $id);
+    } else {
+        $stmt = $conn->prepare("UPDATE rooms SET type = ?, price_per_night = ?, availability = ? WHERE id = ?");
+        $stmt->bind_param("siii", $type, $price, $availability, $id);
+    }
     $stmt->execute();
     $stmt->close();
 }
@@ -60,16 +65,37 @@ function updateRoomAvailability($id, $availability) {
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $success = "";
     $error = "";
+
+    // Image handling
+    $image = null;
+    if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+        $fileType = exif_imagetype($_FILES['image']['tmp_name']);
+        if (!in_array($fileType, [IMAGETYPE_JPEG, IMAGETYPE_PNG])) {
+            $error = "Only JPEG and PNG files are allowed.";
+        } else {
+            $uploadDir = 'uploads/';
+            if (!is_dir($uploadDir)) {
+                mkdir($uploadDir, 0755, true);
+            }
+            $uploadFile = $uploadDir . basename($_FILES['image']['name']);
+            if (!move_uploaded_file($_FILES['image']['tmp_name'], $uploadFile)) {
+                $error = "Failed to upload room image.";
+            } else {
+                $image = $uploadFile;
+            }
+        }
+    }
+
     if (isset($_POST['add'])) {
-        if (array_key_exists($_POST['type'], $roomTypes)) {
-            addRoomType($_POST['type'], $roomTypes[$_POST['type']], $_POST['availability']);
+        if (array_key_exists($_POST['type'], $roomTypes) && $image !== null) {
+            addRoomType($_POST['type'], $roomTypes[$_POST['type']], $_POST['availability'], $image);
             $success = "Room added successfully.";
         } else {
-            $error = "Invalid room type.";
+            $error = "Invalid room type or image.";
         }
     } elseif (isset($_POST['edit'])) {
         if (array_key_exists($_POST['type'], $roomTypes)) {
-            editRoomType($_POST['id'], $_POST['type'], $roomTypes[$_POST['type']], $_POST['availability']);
+            editRoomType($_POST['id'], $_POST['type'], $roomTypes[$_POST['type']], $_POST['availability'], $image);
             $success = "Room edited successfully.";
         } else {
             $error = "Invalid room type.";
@@ -98,7 +124,7 @@ $rooms = getRooms();
 <head>
     <meta charset="utf-8">
     <title>Room Management</title>
-    <link href="../roommgmt.css" rel="stylesheet" type="text/css">
+    <link href="../usermgmt.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer">
 
     <script>
@@ -139,7 +165,7 @@ $rooms = getRooms();
 
         <div id="add-form" class="form-container active">
             <h3>Add Room Type</h3>
-            <form method="post">
+            <form method="post" enctype="multipart/form-data">
                 <label for="type">Room Type:</label>
                 <select id="type" name="type">
                     <option value="Single">Single</option>
@@ -148,13 +174,15 @@ $rooms = getRooms();
                 </select>
                 <label for="availability">Availability (0 for Available, 1 for Unavailable):</label>
                 <input type="number" id="availability" name="availability" min="0" max="1" required>
+                <label for="image">Room Image:</label>
+                <input type="file" id="image" name="image" accept="image/jpeg, image/png" required>
                 <button type="submit" name="add">Add Room</button>
             </form>
         </div>
 
         <div id="edit-form" class="form-container">
             <h3>Edit Room Type</h3>
-            <form method="post">
+            <form method="post" enctype="multipart/form-data">
                 <label for="id">Room ID:</label>
                 <select id="id" name="id">
                     <?php foreach ($rooms as $room): ?>
@@ -169,6 +197,8 @@ $rooms = getRooms();
                 </select>
                 <label for="availability">Availability (0 for Available, 1 for Unavailable):</label>
                 <input type="number" id="availability" name="availability" min="0" max="1" required>
+                <label for="image">Room Image (leave empty to keep current image):</label>
+                <input type="file" id="image" name="image" accept="image/jpeg, image/png">
                 <button type="submit" name="edit">Edit Room</button>
             </form>
         </div>
@@ -200,24 +230,30 @@ $rooms = getRooms();
                 <button type="submit" name="update">Update Availability</button>
             </form>
         </div>
-        <h3>Existing Rooms</h3>
+
+        <h3>Existing Room Types</h3>
         <table>
-            <tr>
-                <th>ID</th>
-                <th>Type</th>
-                <th>Price per Night</th>
-                <th>Availability</th>
-            </tr>
-            <?php foreach ($rooms as $room): ?>
-            <tr>
-                <td><?php echo $room['id']; ?></td>
-                <td><?php echo $room['type']; ?></td>
-                <td><?php echo $room['price_per_night']; ?></td>
-                <td><?php echo $room['availability']; ?></td>
-            </tr>
-            <?php endforeach; ?>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Type</th>
+                    <th>Price</th>
+                    <th>Availability</th>
+                    <th>Image</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($rooms as $room): ?>
+                    <tr>
+                        <td><?= $room['id'] ?></td>
+                        <td><?= $room['type'] ?></td>
+                        <td><?= $room['price_per_night'] ?></td>
+                        <td><?= $room['availability'] ? 'Unavailable' : 'Available' ?></td>
+                        <td><img src="<?= $room['image'] ?>" alt="Room Image" style="width:100px;height:100px;"></td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
         </table>
     </div>
 </body>
 </html>
-
