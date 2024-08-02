@@ -39,43 +39,54 @@ $conn->close();
     <meta charset="utf-8">
     <title>Room Selection</title>
     <link href="../styles.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lalezar&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body class="loggedin">
-    <div class="header">
-        <div>
-            <h1>Room Selection</h1>
+    <nav class="navtop">
+        <div class="nav-container">
+            <div class="logo">
+                <a href="home.php"><img src="" alt="MotelEase Logo"></a>
+            </div>
+            <div class="nav-links">
+                <a href="aboutus.html" class="nav-link">About us</a>
+                <a href="profile.php" class="nav-link"><i class="fas fa-user-circle"></i> Profile</a>
+                <a href="logout.php" class="nav-link"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </div>
         </div>
-    </div>
+    </nav>
 
-    <nav class="sidebar">
+    <!-- <nav class="sidebar">
         <a href="home.php"> <img src="" alt="MotelEase Logo"> </a>
         <a href="aboutus.html" class="about-us">About us</a>
         <div class="sidebar-bottom">
             <a href="profile.php"><i class="fas fa-user-circle"></i>Profile</a>
             <a href="logout.php"><i class="fas fa-sign-out-alt"></i>Logout</a>
         </div>
-    </nav>
+    </nav> -->
 
     <div class="content">
         <div class="grid-container">
             <div class="grid-element">
+            <a href="single-bed.php" class="grid-item button-item">
                 <h3>Single Bed</h3>
                 <p>Available Rooms: <?php echo count($singleRooms); ?></p>
-                <a href="single-bed.php" class="grid-item button-item">Select</a>
+            </a>
             </div>
             <div class="grid-element">
+            <a href="double-bed.php" class="grid-item button-item"> 
                 <h3>Double Bed</h3>
                 <p>Available Rooms: <?php echo count($doubleRooms); ?></p>
-                <a href="double-bed.php" class="grid-item button-item">Select</a>
+            </a>
             </div>
             <div class="grid-element">
+            <a href="suite.php" class="grid-item button-item">
                 <h3>Suite</h3>
                 <p>Available Rooms: <?php echo count($suiteRooms); ?></p>
-                <a href="suite.php" class="grid-item button-item">Select</a>
+            </a>
             </div>
         </div>
     </div>
