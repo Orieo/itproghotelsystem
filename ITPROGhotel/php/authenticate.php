@@ -23,7 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['email'], $_POST['passw
         return;
     }
 
-    $sql = "SELECT id, firstName, lastName, phoneNumber, password, admin_checker FROM user WHERE email = ?";
+    $sql = "SELECT id, firstName, lastName, phoneNumber, password, admin_checker, room_manager, amenities_manager FROM user WHERE email = ?";
     $stmt = $conn->prepare($sql);
 
     if ($stmt) {
@@ -31,7 +31,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['email'], $_POST['passw
 
         if ($stmt->execute()) {
             $stmt->store_result();
-            $stmt->bind_result($id, $firstName, $lastName, $phoneNumber, $hashedPassword, $admin_checker);
+            $stmt->bind_result($id, $firstName, $lastName, $phoneNumber, $hashedPassword, $admin_checker, $room_manager, $amenities_manager);
             $stmt->fetch();
 
             if ($stmt->num_rows > 0) { 
@@ -56,7 +56,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['email'], $_POST['passw
 
                         $response = array(
                             "success" => true,
-                            "admin_checker" => $admin_checker
+                            "admin_checker" => $admin_checker,
+                            "room_manager" => $room_manager,
+                            "amenities_manager" => $amenities_manager
                         );
 
                         echo json_encode($response);

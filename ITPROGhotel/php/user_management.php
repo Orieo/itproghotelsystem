@@ -40,11 +40,11 @@ function deleteUser($id) {
     $stmt->close();
 }
 
-// Make user an admin
-function makeAdmin($id) {
+// Update user role
+function updateUserRole($id, $role, $value) {
     global $conn;
-    $stmt = $conn->prepare("UPDATE user SET admin_checker = 1 WHERE id = ?");
-    $stmt->bind_param("i", $id);
+    $stmt = $conn->prepare("UPDATE user SET $role = ? WHERE id = ?");
+    $stmt->bind_param("ii", $value, $id);
     $stmt->execute();
     $stmt->close();
 }
@@ -56,55 +56,63 @@ function getAdmins() {
     return $result->fetch_all(MYSQLI_ASSOC);
 }
 
-// Add an admin
-function addAdmin($id) {
+// Get all room managers
+function getRoomManagers() {
     global $conn;
-    $stmt = $conn->prepare("UPDATE user SET admin_checker = 1 WHERE id = ?");
-    $stmt->bind_param("i", $id);
-    $stmt->execute();
-    $stmt->close();
+    $result = $conn->query("SELECT * FROM user WHERE room_manager = 1");
+    return $result->fetch_all(MYSQLI_ASSOC);
 }
 
-// Remove an admin
-function removeAdmin($id) {
+// Get all amenities managers
+function getAmenitiesManagers() {
     global $conn;
-    $stmt = $conn->prepare("UPDATE user SET admin_checker = 0 WHERE id = ?");
-    $stmt->bind_param("i", $id);
-    $stmt->execute();
-    $stmt->close();
+    $result = $conn->query("SELECT * FROM user WHERE amenities_manager = 1");
+    return $result->fetch_all(MYSQLI_ASSOC);
 }
 
-// Handle form submissions for admin status
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (isset($_POST['add_admin'])) {
-        addAdmin($_POST['id']);
-        $success = "Admin added successfully.";
-    } elseif (isset($_POST['remove_admin'])) {
-        removeAdmin($_POST['id']);
-        $success = "Admin removed successfully.";
-    }
-}
+// Var to hold all users
+$allUsers = getUsers();
+$users = $allUsers; // Default to all users
 
-$admins = getAdmins();
-
-// Handle form submissions
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $success = "";
     $error = "";
+
     if (isset($_POST['delete'])) {
-        deleteUser($_POST['id']);
+        deleteUser($_POST['delete']);
         $success = "User deleted successfully.";
     } elseif (isset($_POST['make_admin'])) {
-        makeAdmin($_POST['id']);
+        updateUserRole($_POST['id'], 'admin_checker', 1);
         $success = "User promoted to admin successfully.";
+    } elseif (isset($_POST['remove_admin'])) {
+        updateUserRole($_POST['id'], 'admin_checker', 0);
+        $success = "Admin removed successfully.";
+    } elseif (isset($_POST['add_roomMan'])) {
+        updateUserRole($_POST['id'], 'room_manager', 1);
+        $success = "Room Manager added successfully.";
+    } elseif (isset($_POST['remove_roomMan'])) {
+        updateUserRole($_POST['id'], 'room_manager', 0);
+        $success = "Room Manager removed successfully.";
+    } elseif (isset($_POST['add_amenMan'])) {
+        updateUserRole($_POST['id'], 'amenities_manager', 1);
+        $success = "Amenities Manager added successfully.";
+    } elseif (isset($_POST['remove_amenMan'])) {
+        updateUserRole($_POST['id'], 'amenities_manager', 0);
+        $success = "Amenities Manager removed successfully.";
     } elseif (isset($_POST['search'])) {
         $users = searchUser($_POST['email']);
+    } elseif (isset($_POST['reset_users'])) {
+        $users = $allUsers; // Reset to all users
+    } else {
+        $users = [];
     }
 }
 
 if (!isset($users)) {
     $users = getUsers();
 }
+
+$admins = getAdmins();
 ?>
 
 <!DOCTYPE html>
@@ -114,20 +122,30 @@ if (!isset($users)) {
     <title>User Management</title>
     <link href="../usermgmt.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer">
-    <style>
-
-    </style>
     <script>
         function showForm(formId) {
-        const forms = document.querySelectorAll('.form-container');
-        forms.forEach(form => form.classList.remove('active'));
-        document.getElementById(formId).classList.add('active');
+            const forms = document.querySelectorAll('.form-container');
+            forms.forEach(form => form.classList.remove('active'));
+            document.getElementById(formId).classList.add('active');
 
-        const buttons = document.querySelectorAll('.toggle-container button');
-        buttons.forEach(button => button.classList.remove('active'));
-        document.querySelector(`[onclick="showForm('${formId}')"]`).classList.add('active');
+            const buttons = document.querySelectorAll('.toggle-container button');
+            buttons.forEach(button => button.classList.remove('active'));
+            document.querySelector(`[onclick="showForm('${formId}')"]`).classList.add('active');
         }
     </script>
+    <style>
+        .form-container {
+            display: none;
+        }
+
+        .form-container.active {
+            display: block;
+        }
+
+        .toggle-container button.active {
+            background-color: #ddd;
+        }
+    </style>
 </head>
 <body>
     <nav class="navtop">
@@ -156,23 +174,31 @@ if (!isset($users)) {
 
         <div id="all-users-form" class="form-container active">
             <h3>All Users</h3>
+                <form action="user_management.php" method="post">
+                    <input type="hidden" name="reset_users">
+                    <button type="">Reset table</button>
+                </form>
             <table>
                 <tr>
-                    <th style="text-align: left; padding-right: 20px;">ID</th>
-                    <th style="text-align: left; padding-right: 20px;">First Name</th>
-                    <th style="text-align: left; padding-right: 20px;">Last Name</th>
-                    <th style="text-align: left; padding-right: 20px;">Email</th>
-                    <th style="text-align: left; padding-right: 20px;">Phone Number</th>
-                    <th style="text-align: left; padding-right: 20px;">Admin Status</th>
+                    <th>ID</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                    <th>Phone Number</th>
+                    <th>Admin Status</th>
+                    <th>Room Manager</th>
+                    <th>Amenities Status</th>
                 </tr>
                 <?php foreach ($users as $user): ?>
                 <tr>
-                    <td style="text-align: left; padding-right: 20px;"><?php echo $user['id']; ?></td>
-                    <td style="text-align: left; padding-right: 20px;"><?php echo $user['firstName']; ?></td>
-                    <td style="text-align: left; padding-right: 20px;"><?php echo $user['lastName']; ?></td>
-                    <td style="text-align: left; padding-right: 20px;"><?php echo $user['email']; ?></td>
-                    <td style="text-align: left; padding-right: 20px;"><?php echo $user['phoneNumber']; ?></td>
-                    <td style="text-align: left; padding-right: 20px;"><?php echo $user['admin_checker'] ? 'Yes' : 'No'; ?></td>
+                    <td><?= $user['id']; ?></td>
+                    <td><?= $user['firstName']; ?></td>
+                    <td><?= $user['lastName']; ?></td>
+                    <td><?= $user['email']; ?></td>
+                    <td><?= $user['phoneNumber']; ?></td>
+                    <td><?= $user['admin_checker'] ? 'Yes' : 'No'; ?></td>
+                    <td><?= $user['room_manager'] ? 'Yes' : 'No'; ?></td>
+                    <td><?= $user['amenities_manager'] ? 'Yes' : 'No'; ?></td>
                 </tr>
                 <?php endforeach; ?>
             </table>
@@ -180,89 +206,117 @@ if (!isset($users)) {
 
         <div id="search-form" class="form-container">
             <h3>Search User</h3>
-            <form action="user_management.php" method="post">
-                <input type="hidden" name="search">
+            <form action="" method="post">
                 <label for="email">Email:</label>
                 <input type="email" id="email" name="email" required>
-                <button type="submit">Search</button>
+                <input type="submit" name="search" value="Search">
             </form>
-            <?php if (isset($users) && count($users) > 0): ?>
-                <h4>Search Results</h4>
+            <?php if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['search']) && !empty($users)): ?>
                 <table>
                     <tr>
-                        <th style="text-align: left; padding-right: 20px;">ID</th>
-                        <th style="text-align: left; padding-right: 20px;">First Name</th>
-                        <th style="text-align: left; padding-right: 20px;">Last Name</th>
-                        <th style="text-align: left; padding-right: 20px;">Email</th>
-                        <th style="text-align: left; padding-right: 20px;">Phone Number</th>
-                        <th style="text-align: left; padding-right: 20px;">Admin Status</th>
+                        <th>ID</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Email</th>
+                        <th>Phone Number</th>
+                        <th>Admin Status</th>
+                        <th>Room Manager</th>
+                        <th>Amenities Status</th>
                     </tr>
                     <?php foreach ($users as $user): ?>
                     <tr>
-                        <td style="text-align: left; padding-right: 20px;"><?php echo $user['id']; ?></td>
-                        <td style="text-align: left; padding-right: 20px;"><?php echo $user['firstName']; ?></td>
-                        <td style="text-align: left; padding-right: 20px;"><?php echo $user['lastName']; ?></td>
-                        <td style="text-align: left; padding-right: 20px;"><?php echo $user['email']; ?></td>
-                        <td style="text-align: left; padding-right: 20px;"><?php echo $user['phoneNumber']; ?></td>
-                        <td style="text-align: left; padding-right: 20px;"><?php echo $user['admin_checker'] ? 'Yes' : 'No'; ?></td>
+                        <td><?= $user['id']; ?></td>
+                        <td><?= $user['firstName']; ?></td>
+                        <td><?= $user['lastName']; ?></td>
+                        <td><?= $user['email']; ?></td>
+                        <td><?= $user['phoneNumber']; ?></td>
+                        <td><?= $user['admin_checker'] ? 'Yes' : 'No'; ?></td>
+                        <td><?= $user['room_manager'] ? 'Yes' : 'No'; ?></td>
+                        <td><?= $user['amenities_manager'] ? 'Yes' : 'No'; ?></td>
                     </tr>
                     <?php endforeach; ?>
                 </table>
-            <?php elseif (isset($users)): ?>
-                <p>No users found.</p>
             <?php endif; ?>
         </div>
 
         <div id="delete-form" class="form-container">
             <h3>Delete User</h3>
-            <form action="user_management.php" method="post">
-                <input type="hidden" name="delete">
-                <label for="id">User ID:</label>
-                <input type="text" id="id" name="id" required>
-                <button type="submit">Delete</button>
+            <form action="" method="post">
+                <label for="delete">User ID:</label>
+                <input type="number" id="delete" name="delete" required>
+                <input type="submit" value="Delete">
             </form>
         </div>
 
         <div id="admin-status-form" class="form-container">
-    <h3>Admin List</h3>
-    
-    <!-- Admin List -->
+    <h3>Admin Status</h3>
+    <form action="" method="post">
+        <label for="id">User ID:</label>
+        <input type="number" id="id" name="id" required>
+        <input type="submit" name="make_admin" value="Add Admin">
+        <input type="submit" name="remove_admin" value="Remove Admin">
+        <input type="submit" name="add_roomMan" value="Add Room Manager">
+        <input type="submit" name="remove_roomMan" value="Remove Room Manager">
+        <input type="submit" name="add_amenMan" value="Add Amenities Manager">
+        <input type="submit" name="remove_amenMan" value="Remove Amenities Manager">
+    </form>
+
+    <h3>Admins</h3>
     <table>
         <tr>
-            <th style="text-align: left; padding-right: 20px;">ID</th>
-            <th style="text-align: left; padding-right: 20px;">First Name</th>
-            <th style="text-align: left; padding-right: 20px;">Last Name</th>
-            <th style="text-align: left; padding-right: 20px;">Email</th>
-            <th style="text-align: left; padding-right: 20px;">Phone Number</th>
+            <th>ID</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
         </tr>
         <?php foreach ($admins as $admin): ?>
         <tr>
-            <td style="text-align: left; padding-right: 20px;"><?php echo $user['id']; ?></td>
-            <td style="text-align: left; padding-right: 20px;"><?php echo $user['firstName']; ?></td>
-            <td style="text-align: left; padding-right: 20px;"><?php echo $user['lastName']; ?></td>
-            <td style="text-align: left; padding-right: 20px;"><?php echo $user['email']; ?></td>
-            <td style="text-align: left; padding-right: 20px;"><?php echo $user['phoneNumber']; ?></td>
-         </tr>
+            <td><?= $admin['id']; ?></td>
+            <td><?= $admin['firstName']; ?></td>
+            <td><?= $admin['lastName']; ?></td>
+            <td><?= $admin['email']; ?></td>
+        </tr>
         <?php endforeach; ?>
     </table>
 
-    
-    <h4>Add Admin</h4>
-    <form action="user_management.php" method="post">
-        <input type="hidden" name="add_admin">
-        <label for="id">User ID:</label>
-        <input type="text" id="id" name="id" required>
-        <button type="submit">Add Admin</button>
-    </form>
+    <h3>Room Managers</h3>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+        </tr>
+        <?php $roomManagers = getRoomManagers(); ?>
+        <?php foreach ($roomManagers as $manager): ?>
+        <tr>
+            <td><?= $manager['id']; ?></td>
+            <td><?= $manager['firstName']; ?></td>
+            <td><?= $manager['lastName']; ?></td>
+            <td><?= $manager['email']; ?></td>
+        </tr>
+        <?php endforeach; ?>
+    </table>
 
-    <h4>Remove Admin</h4>
-    <form action="user_management.php" method="post">
-        <input type="hidden" name="remove_admin">
-        <label for="id">Admin ID:</label>
-        <input type="text" id="id" name="id" required>
-        <button type="submit">Remove Admin</button>
-    </form>
+    <h3>Amenities Managers</h3>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+        </tr>
+        <?php $amenitiesManagers = getAmenitiesManagers(); ?>
+        <?php foreach ($amenitiesManagers as $manager): ?>
+        <tr>
+            <td><?= $manager['id']; ?></td>
+            <td><?= $manager['firstName']; ?></td>
+            <td><?= $manager['lastName']; ?></td>
+            <td><?= $manager['email']; ?></td>
+        </tr>
+        <?php endforeach; ?>
+    </table>
 </div>
-    </div>
+</div>
 </body>
 </html>

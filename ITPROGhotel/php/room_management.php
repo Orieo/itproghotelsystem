@@ -21,23 +21,23 @@ $roomTypes = [
 ];
 
 // Add a room type
-function addRoomType($type, $price, $availability, $image) {
+function addRoomType($room_number, $type, $price, $availability, $image) {
     global $conn;
-    $stmt = $conn->prepare("INSERT INTO rooms (type, price_per_night, availability, image) VALUES (?, ?, ?, ?)");
-    $stmt->bind_param("sibs", $type, $price, $availability, $image);
+    $stmt = $conn->prepare("INSERT INTO rooms (room_number, type, price_per_night, availability, image) VALUES (?, ?, ?, ?, ?)");
+    $stmt->bind_param("isibs", $room_number, $type, $price, $availability, $image);
     $stmt->execute();
     $stmt->close();
 }
 
 // Edit a room type
-function editRoomType($id, $type, $price, $availability, $image = null) {
+function editRoomType($id, $room_number, $type, $price, $availability, $image = null) {
     global $conn;
     if ($image) {
-        $stmt = $conn->prepare("UPDATE rooms SET type = ?, price_per_night = ?, availability = ?, image = ? WHERE id = ?");
-        $stmt->bind_param("sibsi", $type, $price, $availability, $image, $id);
+        $stmt = $conn->prepare("UPDATE rooms SET room_number = ?, type = ?, price_per_night = ?, availability = ?, image = ? WHERE id = ?");
+        $stmt->bind_param("isibsi", $room_number, $type, $price, $availability, $image, $id);
     } else {
-        $stmt = $conn->prepare("UPDATE rooms SET type = ?, price_per_night = ?, availability = ? WHERE id = ?");
-        $stmt->bind_param("siii", $type, $price, $availability, $id);
+        $stmt = $conn->prepare("UPDATE rooms SET room_number = ?, type = ?, price_per_night = ?, availability = ? WHERE id = ?");
+        $stmt->bind_param("isibsi", $room_number, $type, $price, $availability, $id);
     }
     $stmt->execute();
     $stmt->close();
@@ -86,27 +86,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 
-    if (isset($_POST['add'])) {
-        if (array_key_exists($_POST['type'], $roomTypes) && $image !== null) {
-            addRoomType($_POST['type'], $roomTypes[$_POST['type']], $_POST['availability'], $image);
-            $success = "Room added successfully.";
-        } else {
-            $error = "Invalid room type or image.";
-        }
-    } elseif (isset($_POST['edit'])) {
-        if (array_key_exists($_POST['type'], $roomTypes)) {
-            editRoomType($_POST['id'], $_POST['type'], $roomTypes[$_POST['type']], $_POST['availability'], $image);
-            $success = "Room edited successfully.";
-        } else {
-            $error = "Invalid room type.";
-        }
-    } elseif (isset($_POST['delete'])) {
-        deleteRoomType($_POST['id']);
-        $success = "Room deleted successfully.";
-    } elseif (isset($_POST['update'])) {
-        updateRoomAvailability($_POST['id'], $_POST['availability']);
-        $success = "Room availability updated successfully.";
+if (isset($_POST['add'])) {
+    if (array_key_exists($_POST['type'], $roomTypes) && $image !== null) {
+        addRoomType($_POST['room_number'], $_POST['type'], $roomTypes[$_POST['type']], $_POST['availability'], $image);
+        $success = "Room added successfully.";
+    } else {
+        $error = "Invalid room type or image.";
     }
+} elseif (isset($_POST['edit'])) {
+    if (array_key_exists($_POST['type'], $roomTypes)) {
+        editRoomType($_POST['id'], $_POST['room_number'], $_POST['type'], $roomTypes[$_POST['type']], $_POST['availability'], $image);
+        $success = "Room edited successfully.";
+    } else {
+        $error = "Invalid room type.";
+    }
+}
 }
 
 // Retrieve existing rooms
@@ -165,44 +159,49 @@ $rooms = getRooms();
         </div>
 
         <div id="add-form" class="form-container active">
-            <h3>Add Room Type</h3>
-            <form method="post" enctype="multipart/form-data">
-                <label for="type">Room Type:</label>
-                <select id="type" name="type">
-                    <option value="Single">Single</option>
-                    <option value="Double">Double</option>
-                    <option value="Suite">Suite</option>
-                </select>
-                <label for="availability">Availability (0 for Available, 1 for Unavailable):</label>
-                <input type="number" id="availability" name="availability" min="0" max="1" required>
-                <label for="image">Room Image:</label>
-                <input type="file" id="image" name="image" accept="image/jpeg, image/png" required>
-                <button type="submit" name="add">Add Room</button>
-            </form>
-        </div>
+    <h3>Add Room Type</h3>
+    <form method="post" enctype="multipart/form-data">
+        <label for="room_number">Room Number:</label>
+        <input type="number" id="room_number" name="room_number" required>
+        <label for="type">Room Type:</label>
+        <select id="type" name="type">
+            <option value="Single">Single</option>
+            <option value="Double">Double</option>
+            <option value="Suite">Suite</option>
+        </select>
+        <label for="availability">Availability (0 for Available, 1 for Unavailable):</label>
+        <input type="number" id="availability" name="availability" min="0" max="1" required>
+        <label for="image">Room Image:</label>
+        <input type="file" id="image" name="image" accept="image/jpeg, image/png" required>
+        <button type="submit" name="add">Add Room</button>
+    </form>
+</div>
 
-        <div id="edit-form" class="form-container">
-            <h3>Edit Room Type</h3>
-            <form method="post" enctype="multipart/form-data">
-                <label for="id">Room ID:</label>
-                <select id="id" name="id">
-                    <?php foreach ($rooms as $room): ?>
-                        <option value="<?= $room['id'] ?>"><?= $room['id'] ?> (<?= $room['type'] ?>)</option>
-                    <?php endforeach; ?>
-                </select>
-                <label for="type">Room Type:</label>
-                <select id="type" name="type">
-                    <option value="Single">Single</option>
-                    <option value="Double">Double</option>
-                    <option value="Suite">Suite</option>
-                </select>
-                <label for="availability">Availability (0 for Available, 1 for Unavailable):</label>
-                <input type="number" id="availability" name="availability" min="0" max="1" required>
-                <label for="image">Room Image (leave empty to keep current image):</label>
-                <input type="file" id="image" name="image" accept="image/jpeg, image/png">
-                <button type="submit" name="edit">Edit Room</button>
-            </form>
-        </div>
+<div id="edit-form" class="form-container">
+    <h3>Edit Room Type</h3>
+    <form method="post" enctype="multipart/form-data">
+        <label for="id">Room ID:</label>
+        <select id="id" name="id">
+            <?php foreach ($rooms as $room): ?>
+                <option value="<?= $room['id'] ?>"><?= $room['id'] ?> (<?= $room['type'] ?>)</option>
+            <?php endforeach; ?>
+        </select>
+        <label for="room_number">Room Number:</label>
+        <input type="number" id="room_number" name="room_number" required>
+        <label for="type">Room Type:</label>
+        <select id="type" name="type">
+            <option value="Single">Single</option>
+            <option value="Double">Double</option>
+            <option value="Suite">Suite</option>
+        </select>
+        <label for="availability">Availability (0 for Available, 1 for Unavailable):</label>
+        <input type="number" id="availability" name="availability" min="0" max="1" required>
+        <label for="image">Room Image (leave empty to keep current image):</label>
+        <input type="file" id="image" name="image" accept="image/jpeg, image/png">
+        <button type="submit" name="edit">Edit Room</button>
+    </form>
+</div>
+
 
         <div id="delete-form" class="form-container">
             <h3>Delete Room Type</h3>
@@ -233,28 +232,30 @@ $rooms = getRooms();
         </div>
 
         <h3>Existing Room Types</h3>
-        <table>
-            <thead>
+            <table>
+                <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>Type</th>
-                    <th>Price</th>
-                    <th>Availability</th>
-                    <th>Image</th>
-                </tr>
-            </thead>
+                <th>ID</th>
+                <th>Room Number</th>
+                <th>Type</th>
+                <th>Price</th>
+                <th>Availability</th>
+                <th>Image</th>
+            </tr>
+        </thead>
             <tbody>
-                <?php foreach ($rooms as $room): ?>
-                    <tr>
-                        <td><?= $room['id'] ?></td>
-                        <td><?= $room['type'] ?></td>
-                        <td><?= $room['price_per_night'] ?></td>
-                        <td><?= $room['availability'] ? 'Unavailable' : 'Available' ?></td>
-                        <td><img src="<?= $room['image'] ?>" alt="Room Image" style="width:100px;height:100px;"></td>
-                    </tr>
+            <?php foreach ($rooms as $room): ?>
+                <tr>
+                <td><?= $room['id'] ?></td>
+                <td><?= $room['room_number'] ?></td>
+                <td><?= $room['type'] ?></td>
+                <td><?= $room['price_per_night'] ?></td>
+                <td><?= $room['availability'] ? 'Unavailable' : 'Available' ?></td>
+                <td><img src="<?= $room['image'] ?>" alt="Room Image" style="width:100px;height:100px;"></td>
+                </tr>
                 <?php endforeach; ?>
             </tbody>
-        </table>
+            </table>
     </div>
 </body>
 </html>

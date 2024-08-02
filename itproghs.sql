@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 02, 2024 at 12:00 PM
+-- Generation Time: Aug 02, 2024 at 08:31 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -87,15 +87,17 @@ CREATE TABLE `rooms` (
   `type` varchar(50) DEFAULT NULL,
   `price_per_night` decimal(10,2) DEFAULT NULL,
   `availability` int(11) DEFAULT NULL,
-  `image` mediumblob NOT NULL
+  `image` mediumblob NOT NULL,
+  `room_number` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `rooms`
 --
 
-INSERT INTO `rooms` (`id`, `type`, `price_per_night`, `availability`, `image`) VALUES
-(1, 'Suite', 1499.00, 0, '');
+INSERT INTO `rooms` (`id`, `type`, `price_per_night`, `availability`, `image`, `room_number`) VALUES
+(1, 'Suite', 1499.00, 0, '', 0),
+(24, 'Single', 799.00, 0, 0x75706c6f6164732f736b69707065726661742e706e67, 1324);
 
 -- --------------------------------------------------------
 
@@ -111,18 +113,19 @@ CREATE TABLE `user` (
   `phoneNumber` varchar(13) NOT NULL,
   `password` varchar(200) NOT NULL,
   `profilePicture` mediumblob NOT NULL,
-  `admin_checker` int(1) NOT NULL
+  `admin_checker` int(1) NOT NULL,
+  `room_manager` int(11) DEFAULT 0,
+  `amenities_manager` int(11) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`id`, `firstName`, `lastName`, `email`, `phoneNumber`, `password`, `profilePicture`, `admin_checker`) VALUES
-(1, 'ulrekt', 'perez', 'ulrekt@gmail.com', '09495935678', '$2y$10$jHEh5aJ3pdeFscIAbE1hEusG6KyfyO3dfBNvCvvyr6uRyUbDMuns2', 0x75706c6f6164732f736b69707065726661742e706e67, 1),
-(2, 'ricky', 'reyes', 'ulrek2t@gmail.com', '09495935678', '$2y$10$HySF.ZqVx1UzBFzw64XOLuVdgfy4AG0w4Z3oWttTr8iZjyJ5dfwKu', 0x75706c6f6164732f736b69707065726661742e706e67, 0),
-(3, 'Yves', 'Jimenez', 'yvesandrei02@gmail.com', '09173175660', '$2y$10$QwbO7YlEF6eD.sOazH7BXuHafjATKXd0BfV1VqKafWalEEzYmpNDO', 0x75706c6f6164732f324b734d614b694d6d4d6562453332756b4858585a372e6a7067, 1),
-(4, 'Alvin', 'Jimenez', 'yvesandrei0323@gmail.com', '09173175660', '$2y$10$DaOkBP1JaC3LEDlKhKH4L.QKtNeQCtZJ13KxtdaKjwsiUDEpe01Uq', 0x75706c6f6164732f616b617473756b692e6a7067, 0);
+INSERT INTO `user` (`id`, `firstName`, `lastName`, `email`, `phoneNumber`, `password`, `profilePicture`, `admin_checker`, `room_manager`, `amenities_manager`) VALUES
+(1, 'ulrekt', 'perez', 'ulrekt@gmail.com', '09495935678', '$2y$10$jHEh5aJ3pdeFscIAbE1hEusG6KyfyO3dfBNvCvvyr6uRyUbDMuns2', 0x75706c6f6164732f736b69707065726661742e706e67, 1, 0, 0),
+(3, 'Yves', 'Jimenez', 'yvesandrei02@gmail.com', '09173175660', '$2y$10$QwbO7YlEF6eD.sOazH7BXuHafjATKXd0BfV1VqKafWalEEzYmpNDO', 0x75706c6f6164732f324b734d614b694d6d4d6562453332756b4858585a372e6a7067, 1, 0, 0),
+(4, 'Alvin', 'Jimenez', 'yvesandrei0323@gmail.com', '09173175660', '$2y$10$DaOkBP1JaC3LEDlKhKH4L.QKtNeQCtZJ13KxtdaKjwsiUDEpe01Uq', 0x75706c6f6164732f616b617473756b692e6a7067, 0, 0, 0);
 
 --
 -- Indexes for dumped tables
@@ -188,7 +191,7 @@ ALTER TABLE `booking_details`
 -- AUTO_INCREMENT for table `rooms`
 --
 ALTER TABLE `rooms`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `user`

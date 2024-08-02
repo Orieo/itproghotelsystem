@@ -92,7 +92,15 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                window.location.href = data.admin_checker == 1 ? "php/admin_home.php" : "php/home.php";
+                if (data.admin_checker == 1) {
+                    window.location.href = "php/admin_home.php";
+                } else if (data.room_manager == 1) {
+                    window.location.href = "php/room_management.php";
+                } else if (data.amenities_manager == 1) {
+                    window.location.href = "php/amenities_management.php";
+                } else {
+                    window.location.href = "php/home.php";
+                }
             } else {
                 loginErrorMessages.innerHTML = data.message;
             }
