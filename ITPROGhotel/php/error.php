@@ -68,7 +68,7 @@ $message = isset($_GET['message']) ? htmlspecialchars($_GET['message']) : 'An un
     <div class="content">
         <h2>Booking Error</h2>
         <p><?= $message ?></p>
-        <a href="checkout.php" class="button-item">Return to Checkout</a>
+        <a href="home.php" class="button-item">Return to Home</a>
     </div>
 </body>
 </html>

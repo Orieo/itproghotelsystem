@@ -21,6 +21,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $bookingDate = date('Y-m-d');
     $bookingDetails = $_SESSION['booking'];
 
+    // Check availability for all rooms in the booking
+    foreach ($bookingDetails as $item) {
+        $roomId = $item['type'] === 'room' ? $item['id'] : NULL;
+        if ($roomId !== NULL) {
+            $stmt = $conn->prepare("SELECT availability FROM rooms WHERE id = ?");
+            $stmt->bind_param("i", $roomId);
+            $stmt->execute();
+            $stmt->bind_result($availability);
+            $stmt->fetch();
+            $stmt->close();
+
+            if ($availability == 1) {
+                // Room is unavailable, redirect to error page or display error message
+                $conn->close();
+                header('Location: error.php?message=Room+is+unavailable');
+                exit;
+            }
+        }
+    }
+
     // Insert booking into bookings table
     $stmt = $conn->prepare("INSERT INTO bookings (user_id, user_name, contact, total_price, booked_at) VALUES (?, ?, ?, ?, NOW())");
     $stmt->bind_param("issd", $userId, $customerName, $contactDetails, $finalPrice);
@@ -32,32 +52,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     foreach ($bookingDetails as $item) {
         $roomId = $item['type'] === 'room' ? $item['id'] : NULL;
         if ($roomId !== NULL) {
-            // Check if the room is available
-            $stmt = $conn->prepare("SELECT availability FROM rooms WHERE id = ?");
-            $stmt->bind_param("i", $roomId);
+            $stmt = $conn->prepare("INSERT INTO booking_details (booking_id, room_id, quantity, price) VALUES (?, ?, ?, ?)");
+            $stmt->bind_param("iiid", $bookingId, $roomId, $item['quantity'], $item['price']);
             $stmt->execute();
-            $stmt->bind_result($availability);
-            $stmt->fetch();
             $stmt->close();
 
-            if ($availability == 0) {
-                // Room is available, proceed with booking
-                $stmt = $conn->prepare("INSERT INTO booking_details (booking_id, room_id, quantity, price) VALUES (?, ?, ?, ?)");
-                $stmt->bind_param("iiid", $bookingId, $roomId, $item['quantity'], $item['price']);
-                $stmt->execute();
-                $stmt->close();
-
-                // Update room availability to unavailable
-                $stmt = $conn->prepare("UPDATE rooms SET availability = 1 WHERE id = ?");
-                $stmt->bind_param("i", $roomId);
-                $stmt->execute();
-                $stmt->close();
-            } else {
-                // Room is unavailable, redirect to error page or display error message
-                $conn->close();
-                header('Location: error.php?message=Room+is+unavailable');
-                exit;
-            }
+            // Update room availability to unavailable
+            $stmt = $conn->prepare("UPDATE rooms SET availability = 1 WHERE id = ?");
+            $stmt->bind_param("i", $roomId);
+            $stmt->execute();
+            $stmt->close();
         }
     }
 
