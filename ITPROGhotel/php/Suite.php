@@ -69,6 +69,7 @@ $conn->close();
                         <td>
                             <form action="add-to-cart.php" method="post">
                                 <input type="hidden" name="type" value="room">
+                                <input type="hidden" name="id" value="<?= htmlspecialchars($room['id']) ?>">
                                 <input type="hidden" name="room_number" value="<?= htmlspecialchars($room['room_number']) ?>">
                                 <input type="hidden" name="name" value="Suite Bed Room">
                                 <input type="hidden" name="price" value="<?= htmlspecialchars($room['price_per_night']) ?>">

@@ -19,7 +19,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     $_SESSION['booking'][] = $item;
-
+    // echo "<pre>";
+    // print_r($_SESSION['booking']);
+    // echo "</pre>";
     header('Location: summary.php');
     exit;
 }

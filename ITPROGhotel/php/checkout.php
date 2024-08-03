@@ -30,18 +30,34 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Insert booking details into booking_details table and update room availability
     foreach ($bookingDetails as $item) {
-        $roomId = $item['type'] === 'room' ? $item['id'] : NULL; // Use NULL or an appropriate placeholder for non-room items
+        $roomId = $item['type'] === 'room' ? $item['id'] : NULL;
         if ($roomId !== NULL) {
-            $stmt = $conn->prepare("INSERT INTO booking_details (booking_id, room_id, quantity, price) VALUES (?, ?, ?, ?)");
-            $stmt->bind_param("iiid", $bookingId, $roomId, $item['quantity'], $item['price']);
-            $stmt->execute();
-            $stmt->close();
-
-            // Update room availability to unavailable
-            $stmt = $conn->prepare("UPDATE rooms SET availability = 1 WHERE id = ?");
+            // Check if the room is available
+            $stmt = $conn->prepare("SELECT availability FROM rooms WHERE id = ?");
             $stmt->bind_param("i", $roomId);
             $stmt->execute();
+            $stmt->bind_result($availability);
+            $stmt->fetch();
             $stmt->close();
+
+            if ($availability == 0) {
+                // Room is available, proceed with booking
+                $stmt = $conn->prepare("INSERT INTO booking_details (booking_id, room_id, quantity, price) VALUES (?, ?, ?, ?)");
+                $stmt->bind_param("iiid", $bookingId, $roomId, $item['quantity'], $item['price']);
+                $stmt->execute();
+                $stmt->close();
+
+                // Update room availability to unavailable
+                $stmt = $conn->prepare("UPDATE rooms SET availability = 1 WHERE id = ?");
+                $stmt->bind_param("i", $roomId);
+                $stmt->execute();
+                $stmt->close();
+            } else {
+                // Room is unavailable, redirect to error page or display error message
+                $conn->close();
+                header('Location: error.php?message=Room+is+unavailable');
+                exit;
+            }
         }
     }
 
@@ -133,7 +149,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         Checkout
     </div>
     <nav class="navtop">
-        <!---<a href="home.php"><img src="uploads/motel-ease_logo.png"></a>-->
         <div>
             <a href="aboutus.html" class="about-us">About us</a>
             <a href="profile.php"><i class="fas fa-user-circle"></i> Profile</a>

@@ -24,7 +24,7 @@ $roomTypes = [
 function addRoomType($room_number, $type, $price, $availability, $image) {
     global $conn;
     $stmt = $conn->prepare("INSERT INTO rooms (room_number, type, price_per_night, availability, image) VALUES (?, ?, ?, ?, ?)");
-    $stmt->bind_param("isibs", $room_number, $type, $price, $availability, $image);
+    $stmt->bind_param("isiis", $room_number, $type, $price, $availability, $image);
     $stmt->execute();
     $stmt->close();
 }
@@ -34,10 +34,10 @@ function editRoomType($id, $room_number, $type, $price, $availability, $image = 
     global $conn;
     if ($image) {
         $stmt = $conn->prepare("UPDATE rooms SET room_number = ?, type = ?, price_per_night = ?, availability = ?, image = ? WHERE id = ?");
-        $stmt->bind_param("isibsi", $room_number, $type, $price, $availability, $image, $id);
+        $stmt->bind_param("isiii", $room_number, $type, $price, $availability, $image, $id);
     } else {
         $stmt = $conn->prepare("UPDATE rooms SET room_number = ?, type = ?, price_per_night = ?, availability = ? WHERE id = ?");
-        $stmt->bind_param("isibsi", $room_number, $type, $price, $availability, $id);
+        $stmt->bind_param("isiii", $room_number, $type, $price, $availability, $id);
     }
     $stmt->execute();
     $stmt->close();

@@ -3,8 +3,8 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 03, 2024 at 12:34 AM
--- Server version: 10.4.32-MariaDB
+-- Generation Time: Aug 03, 2024 at 03:42 AM
+-- Server version: 8.0.34
 -- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -28,10 +28,10 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `amenities` (
-  `id` int(11) NOT NULL,
-  `name` varchar(100) NOT NULL,
+  `id` int NOT NULL,
+  `name` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
   `price` decimal(10,2) NOT NULL,
-  `description` text DEFAULT NULL,
+  `description` text COLLATE utf8mb4_general_ci,
   `image` mediumblob NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -52,23 +52,13 @@ INSERT INTO `amenities` (`id`, `name`, `price`, `description`, `image`) VALUES
 --
 
 CREATE TABLE `bookings` (
-  `id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `user_name` varchar(100) NOT NULL,
-  `contact` varchar(50) NOT NULL,
+  `id` int NOT NULL,
+  `user_id` int NOT NULL,
+  `user_name` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `contact` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
   `total_price` decimal(10,2) NOT NULL,
-  `booked_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `booked_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `bookings`
---
-
-INSERT INTO `bookings` (`id`, `user_id`, `user_name`, `contact`, `total_price`, `booked_at`) VALUES
-(16, 4, 'Alvin Jimenez', '09173175660', 2588.40, '2024-08-02 22:24:30'),
-(17, 4, 'Alvin Jimenez', '09173175660', 799.00, '2024-08-02 22:26:11'),
-(18, 4, 'Alvin Jimenez', '09173175660', 799.00, '2024-08-02 22:32:31'),
-(19, 4, 'Alvin Jimenez', '09173175660', 1998.00, '2024-08-02 22:33:05');
 
 -- --------------------------------------------------------
 
@@ -77,11 +67,11 @@ INSERT INTO `bookings` (`id`, `user_id`, `user_name`, `contact`, `total_price`, 
 --
 
 CREATE TABLE `booking_details` (
-  `id` int(11) NOT NULL,
-  `booking_id` int(11) NOT NULL,
-  `room_id` int(11) DEFAULT NULL,
-  `amenity_id` int(11) DEFAULT NULL,
-  `quantity` int(11) DEFAULT NULL,
+  `id` int NOT NULL,
+  `booking_id` int NOT NULL,
+  `room_id` int DEFAULT NULL,
+  `amenity_id` int DEFAULT NULL,
+  `quantity` int DEFAULT NULL,
   `price` decimal(10,2) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -92,12 +82,12 @@ CREATE TABLE `booking_details` (
 --
 
 CREATE TABLE `rooms` (
-  `id` int(11) NOT NULL,
-  `type` varchar(50) DEFAULT NULL,
+  `id` int NOT NULL,
+  `type` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `price_per_night` decimal(10,2) DEFAULT NULL,
-  `availability` int(11) DEFAULT NULL,
+  `availability` int DEFAULT NULL,
   `image` mediumblob NOT NULL,
-  `room_number` int(11) NOT NULL
+  `room_number` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -116,16 +106,16 @@ INSERT INTO `rooms` (`id`, `type`, `price_per_night`, `availability`, `image`, `
 --
 
 CREATE TABLE `user` (
-  `id` int(11) NOT NULL,
-  `firstName` varchar(50) NOT NULL,
-  `lastName` varchar(50) NOT NULL,
-  `email` varchar(50) NOT NULL,
-  `phoneNumber` varchar(13) NOT NULL,
-  `password` varchar(200) NOT NULL,
+  `id` int NOT NULL,
+  `firstName` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `lastName` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `email` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `phoneNumber` varchar(13) COLLATE utf8mb4_general_ci NOT NULL,
+  `password` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
   `profilePicture` mediumblob NOT NULL,
-  `admin_checker` int(1) NOT NULL,
-  `room_manager` int(11) DEFAULT 0,
-  `amenities_manager` int(11) DEFAULT 0
+  `admin_checker` int NOT NULL,
+  `room_manager` int DEFAULT '0',
+  `amenities_manager` int DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -183,31 +173,31 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `amenities`
 --
 ALTER TABLE `amenities`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `bookings`
 --
 ALTER TABLE `bookings`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `booking_details`
 --
 ALTER TABLE `booking_details`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT for table `rooms`
 --
 ALTER TABLE `rooms`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Constraints for dumped tables
