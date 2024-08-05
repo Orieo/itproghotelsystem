@@ -128,6 +128,20 @@ INSERT INTO `user` (`id`, `firstName`, `lastName`, `email`, `phoneNumber`, `pass
 (4, 'Alvin', 'Jimenez', 'yvesandrei0323@gmail.com', '09173175660', '$2y$10$DaOkBP1JaC3LEDlKhKH4L.QKtNeQCtZJ13KxtdaKjwsiUDEpe01Uq', 0x75706c6f6164732f616b617473756b692e6a7067, 0, 0, 0);
 
 --
+-- Table structure for table `review`
+--
+
+CREATE TABLE `reviews` (
+  `id` int NOT NULL,
+  `user_id` int NOT NULL,
+  `user_name` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `room_id` int DEFAULT NULL,
+  `user_rating` int(1) NOT NULL,
+  `user_review` text NOT NULL,
+  `datetime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
 -- Indexes for dumped tables
 --
 
@@ -163,6 +177,12 @@ ALTER TABLE `rooms`
 -- Indexes for table `user`
 --
 ALTER TABLE `user`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `review`
+--
+ALTER TABLE `reviews`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -217,6 +237,13 @@ ALTER TABLE `booking_details`
   ADD CONSTRAINT `booking_details_ibfk_2` FOREIGN KEY (`room_id`) REFERENCES `rooms` (`id`),
   ADD CONSTRAINT `booking_details_ibfk_3` FOREIGN KEY (`amenity_id`) REFERENCES `amenities` (`id`);
 COMMIT;
+
+--
+-- Constraints for table `review`
+--
+ALTER TABLE `reviews`
+  ADD CONSTRAINT `review_table_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
+  ADD CONSTRAINT `review_table_ibfk_2` FOREIGN KEY (`room_id`) REFERENCES `rooms` (`id`);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
