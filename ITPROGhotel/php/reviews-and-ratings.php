@@ -27,6 +27,9 @@ $amenities = $connect->query("SELECT id, name FROM amenities")->fetchAll(PDO::FE
     <title>Review & Rating System</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lalezar&display=swap" rel="stylesheet">
     <style>
         .rating .fa-star {
             font-size: 24px;
@@ -37,9 +40,101 @@ $amenities = $connect->query("SELECT id, name FROM amenities")->fetchAll(PDO::FE
         .review-card {
             margin-bottom: 15px;
         }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #fee0ad;
+        }
+
+        /* Navigation Bar */
+        .navtop {
+            font-family:'Lalezar', system-ui;
+            height: 40px;
+            width: 100%;
+            border: 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-container {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-right: 20px;
+            margin-left: 20px;
+            margin-top: 20px;
+        }
+
+        .logo a img {
+            height: 80px; /* Adjust as necessary */
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            float: right;
+            text-decoration: none;
+            color: #e08679;
+            font-weight: bold;
+            background-color: #fcebcd;
+            border-radius: 20px;
+            padding: 10px 20px;
+        }
+
+        .nav-link {
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+
+        .nav-link { 
+            color: #e08679;
+            text-decoration: none; 
+        }
+
+        .nav-link:visited { 
+            color: #e08679;
+            text-decoration: none; 
+        }
+
+        .nav-link:hover { 
+            color: #e08679;
+            text-decoration: underline; 
+        }
+
+        .nav-link:active { 
+            color: #e08679;
+            text-decoration: none; 
+        }
+
+        .rating .fa-star {
+            font-size: 24px;
+        }
+
+        .star-light {
+            color: #e9ecef;
+        }
+
+        .review-card {
+            margin-bottom: 15px;
+        }
     </style>
 </head>
 <body>
+<nav class="navtop">
+        <div class="nav-container">
+            <div class="logo">
+                <a href="home.php"><img src="uploads/motel-ease_logo.png"></a>
+            </div>
+            <div class="nav-links">
+                <a href="aboutus.html" class="nav-link">About us</a>
+                <a href="profile.php" class="nav-link"><i class="fas fa-user-circle"></i> Profile</a>
+                <a href="logout.php" class="nav-link"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </div>
+        </div>
+    </nav>
     <div class="container mt-5">
         <div class="card">
             <div class="card-header">Review & Rating System</div>

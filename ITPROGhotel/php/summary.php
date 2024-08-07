@@ -149,10 +149,10 @@ $_SESSION['finalPrice'] = $finalPrice;
             </div>
         </div>
             <div class="confirmation-buttons">
-            <a href="checkout.php" class="button-item">Proceed to Checkout</a>
             <form method="post" >
                 <input type="submit" name="cancel" value="Cancel Booking" class="button-item">
             </form>
+            <a href="checkout.php" class="button-item">Proceed to Checkout</a>
             </div>
     </div>
 </body>
