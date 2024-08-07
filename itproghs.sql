@@ -184,6 +184,8 @@ ALTER TABLE `user`
 --
 ALTER TABLE `reviews`
   ADD PRIMARY KEY (`id`);
+  ADD KEY `user_id` (`user_id`);
+  ADD KEY `room_id` (`room_id`),
 
 --
 -- AUTO_INCREMENT for dumped tables
