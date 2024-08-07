@@ -72,6 +72,12 @@ if (!isset($_SESSION['loggedin'])) {
                     </p>
                 </a>
                 </div>
+                <div class = "grid-element">
+                <a href="reviews-and-ratings.php" class="grid-item button-item">
+                    <h3> Review and Rate </h3>
+                    <p> Let us know your experience with MotelEase by leaving a review! </p>
+                </a>
+                </div>
         </div>
     </div>
 </body>

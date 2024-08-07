@@ -127,18 +127,28 @@ INSERT INTO `user` (`id`, `firstName`, `lastName`, `email`, `phoneNumber`, `pass
 (3, 'Yves', 'Jimenez', 'yvesandrei02@gmail.com', '09173175660', '$2y$10$QwbO7YlEF6eD.sOazH7BXuHafjATKXd0BfV1VqKafWalEEzYmpNDO', 0x75706c6f6164732f324b734d614b694d6d4d6562453332756b4858585a372e6a7067, 1, 0, 0),
 (4, 'Alvin', 'Jimenez', 'yvesandrei0323@gmail.com', '09173175660', '$2y$10$DaOkBP1JaC3LEDlKhKH4L.QKtNeQCtZJ13KxtdaKjwsiUDEpe01Uq', 0x75706c6f6164732f616b617473756b692e6a7067, 0, 0, 0);
 
---
--- Table structure for table `review`
---
+-- Ensure indexes on referenced columns
+ALTER TABLE `user` ADD INDEX (`id`);
+ALTER TABLE `rooms` ADD INDEX (`id`);
+ALTER TABLE `amenities` ADD INDEX (`id`);
 
+-- Create the reviews table
 CREATE TABLE `reviews` (
-  `id` int NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
   `user_id` int NOT NULL,
   `user_name` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
   `room_id` int DEFAULT NULL,
-  `user_rating` int(1) NOT NULL,
-  `user_review` text NOT NULL,
-  `datetime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `amenity_id` int DEFAULT NULL,
+  `user_rating` int NOT NULL,
+  `user_review` text COLLATE utf8mb4_general_ci NOT NULL,
+  `datetime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  KEY `room_id` (`room_id`),
+  KEY `amenity_id` (`amenity_id`),
+  CONSTRAINT `review_user_fk` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `review_room_fk` FOREIGN KEY (`room_id`) REFERENCES `rooms` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `review_amenity_fk` FOREIGN KEY (`amenity_id`) REFERENCES `amenities` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -178,15 +188,6 @@ ALTER TABLE `rooms`
 --
 ALTER TABLE `user`
   ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `review`
---
-ALTER TABLE `reviews`
-  ADD PRIMARY KEY (`id`);
-  ADD KEY `user_id` (`user_id`);
-  ADD KEY `room_id` (`room_id`),
-
 --
 -- AUTO_INCREMENT for dumped tables
 --
